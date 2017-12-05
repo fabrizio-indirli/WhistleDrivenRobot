@@ -6,3 +6,7 @@ https://stm32.eu/2014/01/09/analizator-widma-z-fft-przyklad-aplikacji-na-stm32f4
 
 //Altra guida su acquisizione segnali dalla scheda
 https://www.theunterminatedstring.com/probing-pdm/
+
+//Link all'archivio che contiene le librerie per la FFT
+http://www.st.com/en/embedded-software/stsw-stm32068.html
+//Si tratta della Audio Software Decoding Library, disponibile nella sottocartella Utilities/STM32F4-Discovery/ //dell'archivio nei file libPDMFilter_GCC.a e pdm_filter.h
