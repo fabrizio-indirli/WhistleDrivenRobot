@@ -3,3 +3,6 @@ https://github.com/mechoid9/STM32F4/tree/master/STM32F4-Discovery_FW_V1.1.0/Proj
 
 //Guida in polacco sull'analisi FFT della frequenza acquisita con il microfono integrato sulla scheda STM32F407-DISC
 https://stm32.eu/2014/01/09/analizator-widma-z-fft-przyklad-aplikacji-na-stm32f4discovery/
+
+//Altra guida su acquisizione segnali dalla scheda
+https://www.theunterminatedstring.com/probing-pdm/
