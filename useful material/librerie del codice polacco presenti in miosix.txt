@@ -1,0 +1,5 @@
+Le seguenti librerie usate dal codice polacco sono già presenti in Miosix:
+arm_math.h in \miosix\arch\common\CMSIS\Include
+stm32f4xx.h in \miosix\arch\common\CMSIS\Device\ST\STM32F4xx\Include
+
+Credo che invece le librerie "stm32f4_discovery.h" e "pdm_filter.h" vadano aggiunte manualmente (si trovano nella cartella "esperimenti" sotto "useful material")
