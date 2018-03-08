@@ -71,13 +71,8 @@
       <Option name="org.coocox.codebugger.gdbjtag.core.autoDownload" value="1"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.verify" value="1"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.downloadFuction" value="Erase Effected"/>
-      <Option name="org.coocox.codebugger.gdbjtag.core.defaultAlgorithm" value="STM32F4xx_1024.elf"/>
-      <Option name="org.coocox.codebugger.gdbjtag.coredebugInRamInitCommands" value="cd C:/Users/fabri/OneDrive/università/1 anno magistrale/Advanced Operating Systems/project/BorgoFuscaIndirli/useful material/esperimenti/prove_codice_polacco/DevKit407_AudioSpectrumAnalyzer/Debug/bin
-restore DevKit407_AudioSpectrumAnalyzer.elf
-set {unsigned int*}0xE000ED08 = 0x20000000
-set $sp = {unsigned int*}0x20000000
-set $pc = {unsigned int*}0x20000004
-"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.defaultAlgorithm" value="C:\Users\fabri\AppData\Roaming\CooCox\CoIDE\config\flash\CooCox-Flash\CoIDE_STM32F4xx_1024K\STM32F4xx_1024.elf"/>
+      <Option name="org.coocox.codebugger.gdbjtag.coredebugInRamInitCommands" value="cd C:/Users/fabri/OneDrive/universit?/1 anno magistrale/Advanced Operating Systems/project/BorgoFuscaIndirli/useful material/esperimenti/prove_codice_polacco/DevKit407_AudioSpectrumAnalyzer/Debug/bin restore DevKit407_AudioSpectrumAnalyzer.elf set {unsigned int*}0xE000ED08 = 0x20000000 set $sp = {unsigned int*}0x20000000 set $pc = {unsigned int*}0x20000004 "/>
     </DebugOption>
     <ExcludeFile/>
   </Target>
@@ -92,10 +87,10 @@ set $pc = {unsigned int*}0x20000004
     <File name="cmsis_lib/source/stm32f4xx_fsmc.c" path="cmsis_lib/source/stm32f4xx_fsmc.c" type="1"/>
     <File name="cmsis_lib/include/stm32f4xx_crc.h" path="cmsis_lib/include/stm32f4xx_crc.h" type="1"/>
     <File name="DSP/arm_max_f32.c" path="DSP/StatisticsFunctions/arm_max_f32.c" type="1"/>
-    <File name="cmsis/core_cm4_simd.h" path="cmsis/core_cm4_simd.h" type="1"/>
-    <File name="cmsis_boot/startup" path="" type="2"/>
     <File name="cmsis_boot/stm32f4xx.h" path="cmsis_boot/stm32f4xx.h" type="1"/>
     <File name="DevKit407/fonts.c" path="DevKit407/fonts.c" type="1"/>
+    <File name="cmsis_boot/startup" path="" type="2"/>
+    <File name="cmsis/core_cm4_simd.h" path="cmsis/core_cm4_simd.h" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_spi.c" path="cmsis_lib/source/stm32f4xx_spi.c" type="1"/>
     <File name="cmsis/core_cmFunc.h" path="cmsis/core_cmFunc.h" type="1"/>
     <File name="cmsis/core_cm4.h" path="cmsis/core_cm4.h" type="1"/>

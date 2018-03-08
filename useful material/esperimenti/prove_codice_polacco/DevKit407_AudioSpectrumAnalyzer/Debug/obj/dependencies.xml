@@ -112,14 +112,6 @@
       <source file="..\..\..\cmsis_lib\include\stm32f4xx_spi.h" lastModified="141d712fd80">
          <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
       </source>
-      <source file="..\..\..\main.c" lastModified="160378d3a69">
-         <include file="..\..\..\cmsis\arm_math.h"/>
-         <include file="..\..\..\main.h"/>
-         <include file="..\..\..\pdm_filter.h"/>
-         <include file="..\..\..\DevKit407\stm32f4_discovery.h"/>
-         <include file="..\..\..\DevKit407\stm32f4_discovery_lcd.h"/>
-         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
-      </source>
       <source file="..\..\..\cmsis\core_cmInstr.h" lastModified="141d712d288">
       </source>
       <source file="..\..\..\cmsis_lib\source\stm32f4xx_fsmc.c" lastModified="141d7166880">
