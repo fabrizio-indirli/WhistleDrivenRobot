@@ -17,7 +17,7 @@ SUBDIRS := $(KPATH)
 ## List here your source files (both .s, .c and .cpp)
 ##
 SRC :=                                  \
-main.cpp button.cpp
+main.cpp initialization.c stm32f4_discovery.c
 
 ##
 ## List here additional static libraries with relative path

@@ -1,7 +1,7 @@
 /**
   * Audio Spectrum Analyzer
   * Author: Jan Szemiet
-  */ 
+  */
 
 /* Includes ------------------------------------------------------------------*/
 #include <math.h>
@@ -91,7 +91,7 @@ int main(void)
 
 
   while(1){
-    
+
     // Clear arrays
     for(i=0; i<256; ++i){
       buffer_input_copy[i] = 0;
@@ -113,7 +113,7 @@ int main(void)
         if(z > 512/(OUT_FREQ/1000)){
           z = 0;
 
- 
+
 
           // ************************************************************
           // Calculate Real FFT
@@ -129,7 +129,7 @@ int main(void)
           }
 
           // ************************************************************
-          
+
         }
         Data_Status = 0;
       }
@@ -213,13 +213,13 @@ static void RCC_Configure(void){
   //RCC->AHB1ENR |= RCC_AHB1ENR_CRCEN;
 
   /********/
-  /* AHB1 */
+  /* AHB1: abilita clock delle periferiche GPIOB, GPIOC e CRC */
   /********/
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB | RCC_AHB1Periph_GPIOC |
                          RCC_AHB1Periph_CRC, ENABLE);
 
   /********/
-  /* APB1 */
+  /* APB1: abilita il clock della periferica SPI2 */
   /********/
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
 

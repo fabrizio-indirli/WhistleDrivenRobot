@@ -33,7 +33,7 @@ extern uint32_t Data_Status;
 //l'implementazione delle seguenti 4 funzioni è nel file 'initialization.c'
 RCC_Configure(); //Abilita il generatore di clock
 NVIC_Configure(); //Configura l'interrupt controller (da rimuovere o modificare?)
-GPIO_Configure(); //Configura il GPIO per lavorare con il microfono
+GPIO_Configure(); //Configura il GPIO per lavorare con il microfono - pin PB10 e PC3
 I2S_Configure(); //imposta modalità I2S sulla Serial Peripheral Interface (SPI) e la configura
 
 PDMFilter_InitStruct Filter;//crea la struttura usata dalla libreria PDM
@@ -68,7 +68,7 @@ while(1){
     break;
   }*/
 
-  
+
 
 
   // If the new data packet in the form of a PCM signal is ready
