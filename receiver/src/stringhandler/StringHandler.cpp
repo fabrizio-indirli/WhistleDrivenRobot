@@ -12,7 +12,12 @@ void StringHandler::addChar(char ch) {
         return;
     }
 
-    this->buffer[this->bufferIndex] = ch;
+	if(!this->isOver && ch != this-> END_CHAR)
+    	this->buffer[this->bufferIndex] = ch;
+    else{
+    	this->isOver = true;
+    	Serial.print("I'm over: ");
+    }
     (this->bufferIndex)++;
 }
 

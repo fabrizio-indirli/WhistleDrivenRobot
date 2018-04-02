@@ -6,8 +6,12 @@ USBSerialCommunication::USBSerialCommunication() : SerialCommunication() {
 }
 
 void USBSerialCommunication::updateBuffer() {
-    while(Serial.available() > 0)
-        this->putInTheBuffer(Serial.read());
+    while(Serial.available() > 0){
+    	char c = Serial.read();
+        Serial.print("Oh, a new char ");
+        Serial.println(c);
+        this->putInTheBuffer(c);
+    }
 }
 
 void USBSerialCommunication::print(String *string) {

@@ -3,20 +3,24 @@
 #define BT_TX_PIN 12
 #define BT_RX_PIN 11
 
-BTSerialCommunication btCommunication(BT_TX_PIN, BT_RX_PIN);
-USBSerialCommunication usbSerialCommunication;
+BTSerialCommunication *btCommunication;
+USBSerialCommunication *usbSerialCommunication;
 
 void setup() {
-  //TODO
+  //Serial.begin(9600);
+  btCommunication = new BTSerialCommunication(BT_TX_PIN, BT_RX_PIN);
+  usbSerialCommunication = new USBSerialCommunication();
 }
 
 void loop() {
-  btCommunication.updateBuffer();
-  usbSerialCommunication.updateBuffer();
+  btCommunication->updateBuffer();
+  usbSerialCommunication->updateBuffer();
+  /*if(btCommunication->isTheLineAllRead())
+      usbSerialCommunication->print(btCommunication->getReadLine());
+  if(usbSerialCommunication->isTheLineAllRead())
+      btCommunication->print(usbSerialCommunication->getReadLine());
+*/     
 
-
-  if(btCommunication.isTheLineAllRead())
-      usbSerialCommunication.print(btCommunication.getReadLine());
-  if(usbSerialCommunication.isTheLineAllRead())
-      btCommunication.print(usbSerialCommunication.getReadLine());
+    if(usbSerialCommunication->isTheLineAllRead())
+      usbSerialCommunication->print(usbSerialCommunication->getReadLine());
 }
