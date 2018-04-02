@@ -1,18 +1,28 @@
+#include <Arduino.h>
+#include "../stringhandler/StringHandler.h"
+#ifndef SERIALCOMMUNICATION_H_
+#define SERIALCOMMUNICATION_H_
 
 class SerialCommunication {
 public:
-    SerialCommunication(int tx_pin, int rx_pin);
+    SerialCommunication();
 
     virtual void updateBuffer();
 
-    virtual bool isTheBufferAllRead();
+    virtual void print(String* string);
 
-    virtual char* getReadBuffer();
+    bool isTheLineAllRead();
+
+    String* getReadLine();
+
+protected:
+    static const int MAX_BUFFER_LENGTH = 500;
+    StringHandler stringHandler;
+
+    void putInTheBuffer(char c);
 
 private:
-    static const int MAX_BUFFER_LENGTH = 500;
-    int tx_pin;
-    int rx_pin;
-    int buffer_index;
-    char read_buffer[MAX_BUFFER_LENGTH+1];
+    static const char END_CHAR = '\n';
 };
+
+#endif

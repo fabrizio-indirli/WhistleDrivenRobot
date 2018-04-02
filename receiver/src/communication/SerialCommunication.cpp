@@ -1,6 +1,19 @@
+#include <Arduino.h>
 #include "SerialCommunication.h"
+#include "../stringhandler/StringHandler.h"
 
-SerialCommunication::SerialCommunication(int tx_pin, int rx_pin){
-    this->tx_pin = tx_pin;
-    this->rx_pin = rx_pin;
+SerialCommunication::SerialCommunication(){
+
+}
+
+bool SerialCommunication::isTheLineAllRead() {
+    return this->stringHandler.areYouOver();
+}
+
+void SerialCommunication::putInTheBuffer(char c) {
+    this->stringHandler.addChar(c);
+}
+
+String* SerialCommunication::getReadLine() {
+    return this->stringHandler.getString();
 }

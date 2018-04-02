@@ -8,10 +8,9 @@ public:
 
     void updateBuffer();
 
-    bool isTheBufferAllRead();
-
-    char* getReadBuffer();
+    void print(String* string);
 
 private:
+    static const int BR = 9600;
     SoftwareSerial *bt;
 };
