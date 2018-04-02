@@ -1,4 +1,4 @@
-#include "serialcommunication.h"
+#include "SerialCommunication.h"
 
 SerialCommunication::SerialCommunication(int tx_pin, int rx_pin){
     this->tx_pin = tx_pin;
