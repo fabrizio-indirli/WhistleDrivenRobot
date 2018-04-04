@@ -4,13 +4,17 @@
 BTSerialCommunication::BTSerialCommunication(int tx_pin, int rx_pin): SerialCommunication() {
     pinMode(tx_pin, OUTPUT);
     pinMode(rx_pin, INPUT);
-    *bt =  SoftwareSerial(rx_pin, tx_pin);
+    bt = &SoftwareSerial(rx_pin, tx_pin);
     bt->begin(this->BR);
 }
 
 void BTSerialCommunication::updateBuffer() {
-    while(this->bt->available() > 0)
-        this->putInTheBuffer(this->bt->read());
+    while(this->bt->available() > 0){
+    	char c = this->bt->read();
+        this->bt->print("Oh, a new char ");
+        this->bt->println(c);
+        this->putInTheBuffer(c);
+    }
 }
 
 void BTSerialCommunication::print(String *string) {
