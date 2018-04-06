@@ -16,7 +16,6 @@ public:
     String* getReadLine();
 
 protected:
-    static const int MAX_BUFFER_LENGTH = 500;
     StringHandler stringHandler;
 
     void putInTheBuffer(char c);

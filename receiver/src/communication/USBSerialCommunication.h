@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "SerialCommunication.h"
 
 class USBSerialCommunication : public SerialCommunication {

@@ -1,6 +1,5 @@
 #include "src/communication/BTSerialCommunication.h"
 #include "src/communication/USBSerialCommunication.h"
-#include <SoftwareSerial.h>
 #define BT_TX_PIN 12
 #define BT_RX_PIN 11
 
