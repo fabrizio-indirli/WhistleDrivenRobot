@@ -3,6 +3,9 @@
 #ifndef SERIALCOMMUNICATION_H_
 #define SERIALCOMMUNICATION_H_
 
+/**
+ * This abstract class handles a generic serial data source.
+ */
 class SerialCommunication {
 public:
     SerialCommunication();

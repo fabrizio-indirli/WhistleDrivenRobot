@@ -9,7 +9,7 @@ BTSerialCommunication::BTSerialCommunication(int tx_pin, int rx_pin): SerialComm
 }
 
 void BTSerialCommunication::updateBuffer() {
-    while(this->bt->available() > 0){
+    while(this->bt->available() > 0 && !(this->isTheLineAllRead())){
     	char c = this->bt->read();
         this->putInTheBuffer(c);
     }

@@ -6,7 +6,7 @@ USBSerialCommunication::USBSerialCommunication() : SerialCommunication() {
 }
 
 void USBSerialCommunication::updateBuffer() {
-    while(Serial.available() > 0){
+    while(Serial.available() > 0 && !(this->isTheLineAllRead())){
     	char c = Serial.read();
         this->putInTheBuffer(c);
     }
