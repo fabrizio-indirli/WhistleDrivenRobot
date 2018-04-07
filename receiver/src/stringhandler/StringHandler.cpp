@@ -24,7 +24,9 @@ String* StringHandler::getString() {
     this->buffer[this->bufferIndex] = '\0';
     this->bufferIndex = 0;
     this->isOver = false;
-    return new String(buffer);
+    String* string = new String(buffer);
+    string->trim(); 
+    return string;
 }
 
 bool StringHandler::areYouOver() {

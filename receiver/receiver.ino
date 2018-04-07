@@ -1,25 +1,28 @@
 #include "src/communication/BTSerialCommunication.h"
 #include "src/communication/USBSerialCommunication.h"
 #include "src/hashmap/IntegerHashMap.h"
+#include "src/commands/Executer.h"
 #define BT_TX_PIN 12
 #define BT_RX_PIN 11
-#define HASH_MAP_SIZE 100
 
-BTSerialCommunication *btCommunication;
-USBSerialCommunication *usbSerialCommunication;
+BTSerialCommunication* btCommunication;
+USBSerialCommunication* usbSerialCommunication;
+Executer* executer;
 
 void setup() {
   btCommunication = new BTSerialCommunication(BT_TX_PIN, BT_RX_PIN);
   usbSerialCommunication = new USBSerialCommunication();
-
-  IntegerHashMap<void (*)(String)> commandsMap(HASH_MAP_SIZE);
+  executer = new Executer();
 }
 
 void loop() {
   btCommunication->updateBuffer();
   usbSerialCommunication->updateBuffer();
-  if(btCommunication->isTheLineAllRead())
-      usbSerialCommunication->print(btCommunication->getReadLine());
+  if(btCommunication->isTheLineAllRead()){
+  	  String* string = btCommunication->getReadLine();
+      usbSerialCommunication->print(string);
+  	  executer->execute(string);
+  }
   if(usbSerialCommunication->isTheLineAllRead())
       btCommunication->print(usbSerialCommunication->getReadLine());        
 }
