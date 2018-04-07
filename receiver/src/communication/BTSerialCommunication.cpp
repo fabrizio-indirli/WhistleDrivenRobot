@@ -9,6 +9,7 @@ BTSerialCommunication::BTSerialCommunication(int tx_pin, int rx_pin): SerialComm
 }
 
 void BTSerialCommunication::updateBuffer() {
+    //This cycle doesn't take characters if the building string is completed
     while(this->bt->available() > 0 && !(this->isTheLineAllRead())){
     	char c = this->bt->read();
         this->putInTheBuffer(c);
