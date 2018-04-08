@@ -53,6 +53,17 @@ protected:
      * @param c
      */
     void putInTheBuffer(char c);
+    
+private:
+	/**
+	 * This method is used to evaluate if a character is usable.
+	 */
+	bool isThisCharGood(char c);
+	
+	/**
+	 * This method determines if the given character belongs to the interval.
+	 */
+	bool isInTheInterval(char c, char beginC, char endC);
 };
 
 #endif

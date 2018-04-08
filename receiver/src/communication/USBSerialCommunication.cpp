@@ -14,5 +14,5 @@ void USBSerialCommunication::updateBuffer() {
 }
 
 void USBSerialCommunication::print(String* string) {
-    Serial.print(string->c_str());
+    Serial.println(string->c_str());
 }

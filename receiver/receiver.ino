@@ -11,18 +11,15 @@ Executer* executer;
 
 void setup() {
   btCommunication = new BTSerialCommunication(BT_TX_PIN, BT_RX_PIN);
-  usbSerialCommunication = new USBSerialCommunication();
+  //usbSerialCommunication = new USBSerialCommunication();
   executer = new Executer();
 }
 
 void loop() {
   btCommunication->updateBuffer();
-  usbSerialCommunication->updateBuffer();
   if(btCommunication->isTheLineAllRead()){
   	  String* string = btCommunication->getReadLine();
-      usbSerialCommunication->print(string);
+  	  btCommunication->print(string);
   	  executer->execute(string);
-  }
-  if(usbSerialCommunication->isTheLineAllRead())
-      btCommunication->print(usbSerialCommunication->getReadLine());        
+  }  
 }
