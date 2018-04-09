@@ -26,3 +26,31 @@ In its bottom surface, it has 6 pins:
 	{files/images/mic_bottom_pins}
 	\caption{Pins on the bottom of the microphone.}
 \end{figure}
+
+\subsection{Overview on sound acquisition and processing}
+The sound is acquired by the microphone, and the communication with it happens through I2C.\\
+The microphone acquires data in PDM format: each sample is a single bit, so the acquisition is a stream of bits; an high amplitude is represented with an high density of '1' bits in the bitstream. \\
+The sampling frequency of the ADC is 11000 Hz. \\
+In order to process the data, it has to be converted in PCM format: this is done by doing \textbf{CIC filtering}, with a decimation factor of 16 (each 16-bits sequence of 1-bit PDM samples is converted in one 16-bit PCM sample).\\
+Then, an FFT analysis is performed on 4096 samples at a time to extract the fundamental frequency and the amplitude of the sound.
+
+\subsection{Microphone initialization}
+The initialization of the sound acquisition system comprehends several steps:
+\begin{enumerate}
+	\item SPI, DMA and General Purpose ports B and C are enabled through RCC
+	\item GPIO ports are configured in \textit{Alternate} mode
+	\item SPI is set to work in I2S mode
+	\item interrupt handling for DMA is configured
+	
+\end{enumerate}
+
+\subsection{Sound acquisition and processing}
+Each time a new sample is ready:
+\begin{enumerate}
+	\item Read 16 bits from SPI and transfer them in RAM through DMA
+	\item  Convert 16 PDM samples in one 16-bit PCM sample via \textbf{CIC filtering} with a decimation factor of 16
+	\item Performs FFT through the \textit{arm\_cfft\_radix4\_f32}  module
+	\item Calculates amplitude of each frequency with the \textit{arm\_cmplx\_mag\_f32} module
+	\item calculates the Harmonic Product Spectrum to find the fundamental frequency (and its amplitude) in the vector
+	\item Stores the values of the fundamental frequency and its amplitude in dedicated variables, then calls the \textbf{callback function} to react to the detected frequency.
+\end{enumerate}
