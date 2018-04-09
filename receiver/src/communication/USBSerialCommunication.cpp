@@ -6,14 +6,13 @@ USBSerialCommunication::USBSerialCommunication() : SerialCommunication() {
 }
 
 void USBSerialCommunication::updateBuffer() {
-    while(Serial.available() > 0){
+    //This cycle doesn't take characters if the building string is completed
+    while(Serial.available() > 0 && !(this->isTheLineAllRead())){
     	char c = Serial.read();
-        Serial.print("Oh, a new char ");
-        Serial.println(c);
         this->putInTheBuffer(c);
     }
 }
 
-void USBSerialCommunication::print(String *string) {
-    Serial.print(string->c_str());
+void USBSerialCommunication::print(String* string) {
+    Serial.println(string->c_str());
 }

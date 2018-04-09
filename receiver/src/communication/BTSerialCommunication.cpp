@@ -9,14 +9,13 @@ BTSerialCommunication::BTSerialCommunication(int tx_pin, int rx_pin): SerialComm
 }
 
 void BTSerialCommunication::updateBuffer() {
-    while(this->bt->available() > 0){
+    //This cycle doesn't take characters if the building string is completed
+    while(this->bt->available() > 0 && !(this->isTheLineAllRead())){
     	char c = this->bt->read();
-        this->bt->print("Oh, a new char ");
-        this->bt->println(c);
         this->putInTheBuffer(c);
     }
 }
 
-void BTSerialCommunication::print(String *string) {
+void BTSerialCommunication::print(String* string) {
     this->bt->print(string->c_str());
 }
