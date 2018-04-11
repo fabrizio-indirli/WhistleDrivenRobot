@@ -72,8 +72,9 @@ public:
      * Initialize the driver for recording and handling of the audio
      *
      * \param cback the callback function that will be executed (repeatedly) when
-     * the driver produces bufsize PCM samples
-     * \param bufsize the number of PCM samples to be processed by the callback
+     * the driver produces FFT_SIZE PCM samples
+     * \param freqVar the address of the variable where the frequency of the last acquired sample will be stored
+     * \param amplitudeVar the address of the variable where the amplitude of the last acquired sample will be stored
      *
      */
     void init(function<void ()> cback, float32_t* freqVar, float32_t* amplitudeVar);

@@ -41,6 +41,8 @@ static float32_t freq=0; //stores frequency of the last audio sample acquired
 
 void callback()
 {//function that is called each time a new audio sample has been acquired and processed
+//when this function is called, the variables "freq" and "fundamentalFreqAmplitude" already contain
+//the frequency and the amplitude of the last acquired sample, respectively
 
         if(fundamentalFreqAmplitude>AMPLITUDE_THRESHOLD && freq < FORWARD_MAX_FREQ) {
             //if the frequency of the detected sound is less than FORWARD_MAX_FREQ, move forward
@@ -104,7 +106,9 @@ int main()
 
     //mic initialization: create microphone object and set it
     Microphone& mic = Microphone::instance();
-    //mic is configured so that each time a new audio sample is acquired: 1) its frequency and amplitude are saved in the specified variables
+
+    //mic is configured so that each time a new audio sample is acquired:
+    //1) its frequency and amplitude are saved in the specified variables
     // and 2) the callback function is executed
     mic.init(&callback, &freq, &fundamentalFreqAmplitude);
 
