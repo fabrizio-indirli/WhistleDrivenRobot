@@ -9,9 +9,6 @@ Executer::Executer(){
 
 void Executer::execute(String* string){
 	char commandName = string->charAt(COMMAND_POSITION);
-	//Serial.println(*string);
-	if(this->commandsMap.containsKey(commandName)){
-		//Serial.println("I know");
+	if(this->commandsMap.containsKey(commandName))
 		(*(void (*)(String))(this->commandsMap.get(commandName)))(*string);
-	}
 }

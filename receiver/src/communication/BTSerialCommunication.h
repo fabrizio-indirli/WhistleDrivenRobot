@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 #include "SerialCommunication.h"
+#ifndef BTSERIALCOMMUNICATION_H_
+#define BTSERIALCOMMUNICATION_H_
 
 /**
  * This object is used to handle a Bluetooth serial connection
@@ -8,7 +10,6 @@
  */
 class BTSerialCommunication : public SerialCommunication {
 public:
-
     /**
      * This is the constructor of the object and creates the connection.
      * @param tx_pin the pin used to send information
@@ -31,3 +32,5 @@ private:
      */
     SoftwareSerial *bt;
 };
+
+#endif

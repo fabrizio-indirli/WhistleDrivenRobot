@@ -1,5 +1,7 @@
 #include <Arduino.h>
 #include "SerialCommunication.h"
+#ifndef USBSERIALCOMMUNICATION_H_
+#define USBSERIALCOMMUNICATION_H_
 
 /**
  * This object is used to handle a USB serial connection.
@@ -9,7 +11,6 @@
  */
 class USBSerialCommunication : public SerialCommunication {
 public:
-
     USBSerialCommunication();
 
     void updateBuffer();
@@ -22,3 +23,5 @@ private:
      */
     static const int BR = 9600;
 };
+
+#endif

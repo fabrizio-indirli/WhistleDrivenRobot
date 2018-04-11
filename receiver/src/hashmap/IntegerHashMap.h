@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #ifndef INTEGERHASHMAP_H_
 #define INTEGERHASHMAP_H_
+
 /**
  * This is not a perfect hash map since it is a simplified version
  * to avoid useless massive performance requirement and too high complexities

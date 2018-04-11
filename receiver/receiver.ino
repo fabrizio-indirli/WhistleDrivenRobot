@@ -10,16 +10,17 @@ USBSerialCommunication* usbSerialCommunication;
 Executer* executer;
 
 void setup() {
-  btCommunication = new BTSerialCommunication(BT_TX_PIN, BT_RX_PIN);
-  //usbSerialCommunication = new USBSerialCommunication();
-  executer = new Executer();
+    btCommunication = new BTSerialCommunication(BT_TX_PIN, BT_RX_PIN);
+    //usbSerialCommunication = new USBSerialCommunication();
+    executer = new Executer();
 }
 
 void loop() {
-  btCommunication->updateBuffer();
-  if(btCommunication->isTheLineAllRead()){
-  	  String* string = btCommunication->getReadLine();
-  	  btCommunication->print(string);
-  	  executer->execute(string);
-  }  
+    btCommunication->updateBuffer();
+
+    if(btCommunication->isTheLineAllRead()){
+  	    String* string = btCommunication->getReadLine();
+  	    btCommunication->print(string);
+  	    executer->execute(string);
+    }
 }
