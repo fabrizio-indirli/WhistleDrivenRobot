@@ -15,7 +15,6 @@ void fillHashMap(IntegerHashMap<void (*)(String)>& map){
 
 template <int PIN_TO_ACTIVATE, int PIN_TO_DEACTIVATE>
 void changePinStatus(String string){
-	Serial.println(PIN_TO_ACTIVATE);
 	digitalWrite(PIN_TO_DEACTIVATE, LOW);
 	digitalWrite(PIN_TO_ACTIVATE, HIGH);
 }
