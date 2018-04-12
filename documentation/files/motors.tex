@@ -1,7 +1,7 @@
 The receiver is basically a robot driven by the Discovery board, which sends the opportune commands through the Bluetooth channel. The receiver is provided by an opportune object to take the data, ignore the eventual dirty characters, and execute what is required.\\
 The robot is made by three main parts:
 \begin{itemize}
-	\item The serial communication: this is the section that provides to receive and to send commands, encapsulating all the code within an object and, consequently, allowing changes and extensions;
+	\item The serial communication: this is the section that is in charge of receiving and sending commands, encapsulating all the code within an object and, consequently, allowing changes and extensions;
 	\item The Executer: this is the object that, given a string, looks for a function able to execute it and runs it;
 	\item The controller: this is the part performed by the Arduino \textit{loop} method and provides to invoke the serial communication methods, taking the commands strings and giving them to the executer.
 \end{itemize}
@@ -37,4 +37,4 @@ For instance, this robot uses the following commands:
 	{files/images/ReceiverScheme}
 	\caption{The circuit scheme of the robot. The resistors are all of one KOhm.}
 \end{figure}
-This configuration use wight BJT to allow the motor to perform in two different directions, allowing more moves for the robot. The power that they receives are around the three volts.
+This configuration uses eight BJTs to allow the motors to rotate in two different directions, allowing more moves for the robot. The voltage that they receive is around three volts.
