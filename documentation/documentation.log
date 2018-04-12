@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2018.3.23)  12 APR 2018 22:05
+=======
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.10.28)  11 APR 2018 17:52
+>>>>>>> Stashed changes
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -214,6 +218,7 @@ Overfull \hbox (3.61813pt too wide) in paragraph at lines 60--64
 y the \OT1/cmr/bx/n/10 Mi-cro-phone.cpp
  []
 
+<<<<<<< Updated upstream
 [5]) [6] (./files/wirelesscommunication.tex) [7] (./files/motors.tex
 <files/images/ArduinoConnection.png, id=45, 1648.1575pt x 421.575pt>
 File: files/images/ArduinoConnection.png Graphic file (type png)
@@ -268,6 +273,28 @@ Output written on documentation.pdf (13 pages, 812023 bytes).
 PDF statistics:
  83 PDF objects out of 1000 (max. 8388607)
  50 compressed objects within 1 object stream
+=======
+[5]) [6] (files/wirelesscommunication.tex) [7] (files/motors.tex) [8]
+(files/bibliography.tex) [9] (documentation.aux) ) 
+Here is how much of TeX's memory you used:
+ 1607 strings out of 493323
+ 23169 string characters out of 3139065
+ 84166 words of memory out of 3000000
+ 5127 multiletter control sequences out of 15000+200000
+ 7955 words of font info for 28 fonts, out of 3000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 39i,6n,25p,617b,221s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program Files/MiKTeX 2.9/
+fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
+pe1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/publ
+ic/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfon
+ts/cm/cmr17.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cms
+y10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+
+Output written on documentation.pdf (11 pages, 684494 bytes).
+PDF statistics:
+ 70 PDF objects out of 1000 (max. 8388607)
+>>>>>>> Stashed changes
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
