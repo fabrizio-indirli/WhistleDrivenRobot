@@ -12,13 +12,8 @@
 \contentsline {subsection}{\numberline {3.4}Sound acquisition and processing}{5}
 \contentsline {subsection}{\numberline {3.5}The Microphone.cpp driver}{6}
 \contentsline {section}{\numberline {4}Wireless Communication}{7}
-<<<<<<< Updated upstream
 \contentsline {section}{\numberline {5}Receiver}{8}
 \contentsline {subsection}{\numberline {5.1}The Serial Communication}{8}
 \contentsline {subsection}{\numberline {5.2}The Executer}{9}
 \contentsline {subsection}{\numberline {5.3}The circuit}{10}
 \contentsline {section}{\numberline {6}Bibliography}{11}
-=======
-\contentsline {section}{\numberline {5}Motors}{8}
-\contentsline {section}{\numberline {6}Bibliography}{9}
->>>>>>> Stashed changes

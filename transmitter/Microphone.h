@@ -53,6 +53,9 @@
 #define SAMPLES 8192 //audio samples acquired each time
 #define FFT_SIZE SAMPLES/2 //we store only the real parts of the samples
 
+#define DECIMATION_FACTOR       64
+#define SAMPLING_FREQ            44000
+
 using namespace std::tr1;
 
 /*
