@@ -290,7 +290,7 @@ void maxFreq(float32_t *PCMsample, uint32_t size)
 {
     uint32_t f;
     PCMsample[0]=0;
-    arm_max_f32(output, size, amplitude, &f);
+    arm_max_f32(output, size/4, amplitude, &f);
     *freq=f * 44000 / size;
 }
 
