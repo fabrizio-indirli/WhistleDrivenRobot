@@ -30,7 +30,7 @@ In its bottom surface, it has 6 pins:
 \subsection{Overview on sound acquisition and processing}
 The sound is acquired by the microphone, and the communication with it happens through I2C.\\
 The microphone acquires data in PDM format: each sample is a single bit, so the acquisition is a stream of bits; an high amplitude is represented with an high density of '1' bits in the bitstream. \\
-The sampling frequency of the ADC is 11000 Hz. \\
+The sampling frequency of the ADC is 44000 Hz. \\
 In order to process the data, it has to be converted in PCM format: this is done by doing \textbf{CIC filtering}, with a decimation factor of 16 (each 16-bits sequence of 1-bit PDM samples is converted in one 16-bit PCM sample).\\
 Then, an FFT analysis is performed on 4096 samples at a time to extract the fundamental frequency and the amplitude of the sound.
 
@@ -45,29 +45,64 @@ The initialization of the sound acquisition system comprehends several steps:
 \end{enumerate}
 
 \subsection{Sound acquisition and processing}
-Each time a new sample is read, the functions in the Microphone object:
+Each time a new block of samples is read, the \textit{freq\_recognition} library:
 \begin{enumerate}
-	\item Read 16 bits from SPI and transfer them in RAM through DMA
-	\item  Convert 16 PDM samples in one 16-bit PCM sample via \textbf{CIC filtering} with a decimation factor of 16
+	\item Reads blocks of 16 bits from SPI and transfers them in RAM through DMA
+	\item  Converts 16 PDM samples in one 16-bit PCM sample via \textbf{CIC filtering} with a decimation factor of 16
 	\item Perform FFT through the \textit{arm\_cfft\_radix4\_f32}  module
 	\item Calculate amplitude of each frequency with the \textit{arm\_cmplx\_mag\_f32} module
-	\item Calculate the Harmonic Product Spectrum to find the fundamental frequency (and its amplitude) in the vector
+	\item Calculate the the fundamental frequency (and its amplitude) in the vector
 	\item Store the values of the fundamental frequency and its amplitude in dedicated variables, then call the \textbf{callback function} to react to the detected frequency.
 \end{enumerate}
-In our project, the \textbf{callback function} is in charge of producing commands to the engines when the frequency of the last acquired sample is in some specified ranges.
+In our project, the \textbf{callback function} is in charge of producing commands to the engines when the frequency of the last acquired sample is in some specified ranges. These command are then sent via bluetooth to an Arduino board that drives the engines.
 
-\subsection{The Microphone.cpp driver}
-Sound acquisition and samples' processing is performed by the \textbf{Microphone.cpp} driver. \\
+
+\subsection{The \textit{freq\_recognition} library}
+This library defines a simple interface for recording audio with the embedded microphone on the STM32F4 Discovery board and for performing an FFT analysis to calculate the strongest frequency (and its amplitude) of each sample.
+
+\subsubsection{The Microphone.cpp driver}
+Sound acquisition from the embedded microphone is performed by the \textbf{Microphone.cpp} driver. \\
 This driver was originally developed by Riccardo Binetti, Guido Gerosa and Alessandro Mariani, but it has been improved by Lorenzo Binosi and Matheus Fim in their \textit{Digital Guitar Tuner} project. \\
-For our project, we have also made some changes to the driver, such as including the frequency recognition feature in the driver itself and adding the amplitude recognition of the audio samples. \\
-The usage of the driver is very simple:
+For our project, we have also made some little changes to the driver, such as reducing the decimation factor to improve sampling frequency.
+
+\subsubsection{Interface of the library}
+The \textit{freq\_recognition} library provides the following functions:
+\begin{itemize}
+	\item \textbf{void startAcquisition(function\textless void ()\textgreater cback, float32\_t* freqVar, float32\_t* amplitudeVar)}, whose parameters are:
+	\begin{itemize}
+		\item \textbf{cback}: a pointer to the callback function that will be executed automatically each time a new sample has been acquired and processed.
+		\item \textbf{freqVar}: pointer to the float32\_t where the detected frequency of each sample will be stored
+		\item \textbf{amplitudeVar}: pointer to the float32\_t where the detected amplitude of each sample will be stored
+	\end{itemize}
+\end{itemize}
+
+\subsubsection{How it works}
+The \textit{freq\_recognition} library wraps the microphone driver and adds the FFT analysis features. \\
+When the \textit{startAcquisition()} method is called, the library retrieves the Microphone object (which is a singleton) and configures it to execute the \textit{FFTandCallback} function each time a new chunk of PDM samples is produced (each chunk has FFT\_SIZE samples). Then, the \textit{FFTandCallback} function:
 \begin{enumerate}
-	\item Add the \textbf{Microphone.cpp} and \textbf{Microphone.h} files in the folder of the other source files of the project, and add the \textit{Microphone.cpp} entry in the \textbf{SRC} line of the makefile
-	\item Add the \textit{\#include "Microphone.h"} line at the start of the source file that will use the Microphone object
+	\item Initializes the ARM Complex-FFT module
+	\item Calculates the FFT, producing a vector (called \textit{input[]}) of complex numbers
+	\item Calculates the magnitude of each number in the \textit{input[]} vector and stores the values in the \textit{output[]} vector
+	\item Calls the \textit{maxFreq()} function to calculate the strongest frequency: this is done by finding the position of the greatest value in the \textit{output[]} vector, which is then multiplied for the frequency resolution, which is SAMPLING\_FREQ / FFT\_SIZE
+	\item Calls the callback function specified as parameter of the \textit{startAcquisition()}
+\end{enumerate}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]
+	{files/images/freqAcquisitionUML.png}
+	\caption{UML schema of the interaction between the modules in frequency recognition.}
+\end{figure}
+
+
+\subsubsection{Usage of the library}
+The usage of the library is very simple:
+\begin{enumerate}
+	\item Add the \textbf{freq\_recognition.cpp} and \textbf{freq\_recognition.h} files in the folder of the other source files of the project, and add the \textit{freq\_recognition.cpp} entry in the \textbf{SRC} line of the makefile
+	\item Add the \textit{arm\_bitereversal.c}, \textit{arm\_cfft\_radix4\_f32.c}, \textit{arm\_cfft\_radix4\_init\_f32.c} and \textit{arm\_cmplx\_mag\_f32.c} libraries to your project (these libraries are required by \textit{freq\_recognition.cpp})
+	\item Add the \textit{\#include "freq\_recognition.h"} line at the start of the source file that will use the Microphone object
 	\item Declare 2 float32\_t variables to store the frequency and the amplitude of the last acquired sample
 	\item Define a void callback function without parameters
-	\item Create a Microphone object using the \textit{Microphone::instance()} method
-	\item Initialize the microphone with the \textit{mic.init(\&callback, \&freq, \&amplitude)} method, passing to it the addresses of the 2 variables and of the callback function
-	\item Use the \textit{start()} method of the Microphone object to start acquiring and processing samples. This method is non-blocking (operations are performed in other threads).
+	\item Start the acquisition by calling the \textit{startAcquisition(\&callback, \&freq, \&amplitude)} method, passing to it the addresses of the callback function and of the 2 variables. This method is non-blocking (operations are performed in other threads).
+
 \end{enumerate}
-Each time a new 16-bit PDM sample has been acquired, the driver will perform an FFT analysis on it and will write the frequency and the amplitude of the sample in the chosen variables, then the callback function will be called automatically. This process will be iterated continuously until the \textit{stop()} function of the Microphone object is called.
+Each time a new block of 16-bit PDM samples has been acquired, the driver will perform an FFT analysis on it and will write the frequency and the amplitude of the sample in the chosen variables, then the callback function will be called automatically. This process will be iterated continuously until the \textit{stopAcquisition()} function is called.

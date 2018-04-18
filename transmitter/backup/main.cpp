@@ -1,7 +1,7 @@
 #include <cstdio>
 #include "miosix.h"
 #include <string>
-#include "freq_recognition.h"
+#include "Microphone.h"
 #include <stdio.h>
 
 #define SAMPLES 8192 //audio samples acquired each time
@@ -107,8 +107,22 @@ int main()
 	rightEngineBackward::mode(Mode::OUTPUT);
 	rightEngineBackward::low();
 
-    startAcquisition(&callback, &freq, &fundamentalFreqAmplitude);
-    while(true);
+    //mic initialization: create microphone object and set it
+    Microphone& mic = Microphone::instance();
+
+    //mic is configured so that each time a new audio sample is acquired:
+    //1) its frequency and amplitude are saved in the specified variables
+    // and 2) the callback function is executed
+    mic.init(&callback, &freq, &fundamentalFreqAmplitude);
+
+
+    //start acquisition
+    mic.start();
+	while(true);
+	mic.stop();
+
+
+
 }
 
 

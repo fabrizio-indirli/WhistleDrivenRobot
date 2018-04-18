@@ -13,12 +13,12 @@
  *                                                                        *
  * You should have received a copy of the GNU General Public License      *
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
+ *                                                                        *
+ * Edited by Fabrizio Indirli in 2018 to:                                 *
+ *  - Perform FFT analysis to recognize frequency and amplitude of sound  *
+ *  - Reduce decimation factor to 16 instead of 64 to increase speed      *
  **************************************************************************/
 
-#include <cstdio>
-#include "miosix.h"
-#include "miosix/kernel/scheduler/scheduler.h"
-#include "util/software_i2c.h"
 #include "Microphone.h"
 
 using namespace std;
@@ -28,6 +28,8 @@ typedef Gpio<GPIOB_BASE,10> clk;
 typedef Gpio<GPIOC_BASE,3> dout;
 typedef Gpio<GPIOD_BASE,15>  blueLed;
 
+static float32_t* freq;
+static float32_t* amplitude;
 static const int bufferSize=512; //Buffer RAM is 4*bufferSize bytes
 static const int bufNum = 2;
 static Thread *waiting;
@@ -38,6 +40,9 @@ static const short oversample = 16;
 static unsigned short intReg[filterOrder] = {0,0,0,0};
 static unsigned short combReg[filterOrder] = {0,0,0,0};
 static signed char pdmLUT[] = {-1, 1};
+static float32_t input[SAMPLES]; //vector with PDM samples from the mic
+static float32_t output[FFT_SIZE]; //vector with the amplitudes at each frequency
+static float32_t sum[FFT_SIZE/8]; //used in the Harmonic Product Spectrum calculation
 
 /**
  * Configure the DMA to do another transfer
@@ -160,9 +165,11 @@ Microphone::Microphone() {
 
 }
 
-void Microphone::init(std::tr1::function<void (unsigned short*, unsigned int)> cback, unsigned int bufsize){
+void Microphone::init(std::tr1::function<void ()> cback, float32_t* freqVar, float32_t* amplitudeVar){
     callback = cback;
-    PCMsize = bufsize;
+    PCMsize = FFT_SIZE;
+    freq=freqVar;
+    amplitude=amplitudeVar;
 	blueLed::mode(Mode::OUTPUT);
 }
 
@@ -264,8 +271,41 @@ void* Microphone::callbackLauncher(void* arg){
     reinterpret_cast<Microphone*>(arg)->execCallback();
 }
 
+
+void maxFreq(float32_t *PCMsample, uint32_t size)
+{
+    uint32_t f;
+    PCMsample[0]=0;
+    arm_max_f32(output, size/LP_DIV, amplitude, &f);
+    *freq=f * SAMPLING_FREQ / size;
+}
+
+
 void Microphone::execCallback() {
-    callback(readyBuffer,PCMsize);
+       arm_cfft_radix4_instance_f32 S;    // ARM CFFT module
+    uint16_t i;
+
+    // first step is to adjust the pcm vector to the format of the fft function, alternating real and imaginary parts
+    for(i = 0; i < FFT_SIZE; i++)
+    {
+        /* Real part, make offset by ADC / 2 */
+        input[(uint16_t)i*2] = (float32_t)((float32_t) readyBuffer[i] - 32768);
+        /* imaginary part */
+        input[(uint16_t)((i*2)+1)] = 0;
+    }
+    //Calculate the frequency using FFT
+    // Initialize the CFFT/CIFFT module, intFlag = 0, doBitReverse = 1
+    arm_cfft_radix4_init_f32(&S, FFT_SIZE, 0, 1);
+    // Process the data through the CFFT/CIFFT module
+    arm_cfft_radix4_f32(&S, input);
+    // Process the data through the Complex Magnitude Module for calculating the magnitude at each bin
+    arm_cmplx_mag_f32(input, output, FFT_SIZE);
+
+    // Calculates fundamental frequency and amplitude of the sample, and stores the value in *freq and *amplitude, respectively
+    maxFreq(output, FFT_SIZE);
+
+    //execute the callback function
+    callback();
 }
 
 bool Microphone::processPDM(const unsigned short *pdmbuffer, int size) {
@@ -274,7 +314,6 @@ bool Microphone::processPDM(const unsigned short *pdmbuffer, int size) {
     // convert couples 16 pdm one-bit samples in one 16-bit PCM sample
     for (int i=0; i < length; i++)
     {
-
         processingBuffer[PCMindex++] = PDMFilter(pdmbuffer, i);
     }
     if (PCMindex < PCMsize) //if produced PCM sample are not enough

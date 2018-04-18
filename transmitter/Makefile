@@ -17,7 +17,7 @@ SUBDIRS := $(KPATH)
 ## List here your source files (both .s, .c and .cpp)
 ##
 SRC :=                                  \
-main.cpp Microphone.cpp arm_cfft_radix4_f32.c arm_cfft_radix4_init_f32.c arm_cmplx_mag_f32.c arm_common_tables.c arm_max_f32.c arm_bitreversal.c 
+main.cpp Microphone.cpp arm_cfft_radix4_f32.c arm_cfft_radix4_init_f32.c arm_cmplx_mag_f32.c arm_common_tables.c arm_max_f32.c arm_bitreversal.c freq_recognition.cpp
 
 ##
 ## List here additional static libraries with relative path
