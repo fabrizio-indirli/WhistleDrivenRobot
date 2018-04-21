@@ -10,7 +10,7 @@ char command;
 
 void setup() {
  
-  //definisco modalit√† pin
+  //definisco modalit‡ pin
   pinMode(BT_RX_PIN, INPUT);
   pinMode(BT_TX_PIN, OUTPUT);
  
