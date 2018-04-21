@@ -71,7 +71,7 @@ void callback()
             //if the frequency of the detected sound is between the FORWARD_MIN_FREQ and FORWARD_MAX_FREQ values, move forward
             greenLed::high();
 
-            serial.write("1\r\n");//sends the 'move forward' command over bluetooth to the receiver
+            serial.write("1");//sends the 'move forward' command over bluetooth to the receiver
 
             strcpy(commandString, "move forward");
     }
@@ -79,7 +79,7 @@ void callback()
             //if the frequency of the detected sound is between the TURNLEFT frequency values, turn left
             greenLed::high();
 
-            serial.write("2\r\n");//sends the 'turn left' command over bluetooth to the receiver
+            serial.write("2");//sends the 'turn left' command over bluetooth to the receiver
 
             strcpy(commandString, "turn left");
     }
@@ -87,7 +87,7 @@ void callback()
             //if the frequency of the detected sound is between the TURNRIGHT frequency values, turn right
             greenLed::high();
 
-            serial.write("3\r\n");//sends the 'turn right' command over bluetooth to the receiver
+            serial.write("3");//sends the 'turn right' command over bluetooth to the receiver
 
             strcpy(commandString, "turn right");
     }
@@ -95,7 +95,7 @@ void callback()
             //if the frequency of the detected sound is between the BACKWARD_MIN_FREQ and BACKWARD_MAX_FREQ values, move backwards
             greenLed::high();
 
-            serial.write("4\r\n");//sends the 'move backwards' command over bluetooth to the receiver
+            serial.write("4");//sends the 'move backwards' command over bluetooth to the receiver
 
             strcpy(commandString, "move backwards");
     }
