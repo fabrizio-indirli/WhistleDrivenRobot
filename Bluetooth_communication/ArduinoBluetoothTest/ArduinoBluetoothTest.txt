@@ -1,8 +1,8 @@
 #include <SoftwareSerial.h>
  
 //definisco pin RX e TX da Arduino verso modulo BT
-#define BT_TX_PIN 11
-#define BT_RX_PIN 12
+#define BT_TX_PIN 12
+#define BT_RX_PIN 11
  
 //istanzio oggetto SoftwareSerial (il nostro futuro bluetooth)
 SoftwareSerial bt =  SoftwareSerial(BT_RX_PIN, BT_TX_PIN);

@@ -95,7 +95,7 @@ To send a string, we just need to use the “write” function implemented in serial
 
 ARDUINO CODE (Receiver)
 “ArduinoBluetoothTest.txt” contains a sketch with allow us to send and receive strings trough Bluetooth communication.
-We decided to use PIN 11 (TX) and PIN 12 (RX) to communicate with the hc-05 module.
-So, we should link the hc-05 rx pin to PIN 11 and hc-05 tx pin to PIN 12.
-In our project we only send strings from SMT32F407 to Arduino (not viceversa) so the code will only read from PIN 12. (It’s not necessary to link hc-05 rx to PIN 11 pin for our purpose)
+We decided to use PIN 12 (TX) and PIN 11 (RX) to communicate with the hc-05 module.
+So, we should link the hc-05 rx pin to PIN 12 and hc-05 tx pin to PIN 11.
+In our project we only send strings from SMT32F407 to Arduino (not viceversa) so the code will only read from PIN 11. (It’s not necessary to link hc-05 rx to PIN 12 pin for our purpose)
 To read a string from the hc-05 on Arduino is enough to use the read() function of the SoftwareSerial class.
