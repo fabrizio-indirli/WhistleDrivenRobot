@@ -1,27 +1,52 @@
+#include <Arduino.h>
 #include "filler.h"
 #include "../hashmap/IntegerHashMap.h"
 
 void fillHashMap(IntegerHashMap<void (*)(String)>& map){
-	pinMode(MOTOR1_DIR1_PIN, OUTPUT);
-	pinMode(MOTOR1_DIR2_PIN, OUTPUT);
-	pinMode(MOTOR2_DIR1_PIN, OUTPUT);
-	pinMode(MOTOR2_DIR2_PIN, OUTPUT);
-	map.put('a', &changePinStatus<MOTOR1_DIR1_PIN, MOTOR1_DIR2_PIN>);
-	map.put('b', &changePinStatus<MOTOR1_DIR2_PIN, MOTOR1_DIR1_PIN>);
-	map.put('c', &changePinStatus<MOTOR2_DIR1_PIN, MOTOR2_DIR2_PIN>);
-	map.put('d', &changePinStatus<MOTOR2_DIR2_PIN, MOTOR2_DIR1_PIN>);
-	map.put('e', &stopAll);
+	pinMode(MOTOR1_DIR1_N_PIN, OUTPUT);
+	pinMode(MOTOR1_DIR1_P_PIN, OUTPUT);
+	deactivate<MOTOR1_DIR1_N_PIN, MOTOR1_DIR1_P_PIN>();
+	pinMode(MOTOR1_DIR2_N_PIN, OUTPUT);
+	pinMode(MOTOR1_DIR2_P_PIN, OUTPUT);
+	deactivate<MOTOR1_DIR2_N_PIN, MOTOR1_DIR2_P_PIN>();
+	pinMode(BUZZER_PIN, OUTPUT);
+	buzzerHandler<false>("");
+	
+	map.put('a', &activeDirection<MOTOR1_DIR1_N_PIN, MOTOR1_DIR1_P_PIN, MOTOR1_DIR2_N_PIN, MOTOR1_DIR2_P_PIN>);
+	map.put('b', &activeDirection<MOTOR1_DIR2_N_PIN, MOTOR1_DIR2_P_PIN, MOTOR1_DIR1_N_PIN, MOTOR1_DIR1_P_PIN>);
+	map.put('e', &deactivateMotors<MOTOR1_DIR1_N_PIN, MOTOR1_DIR1_P_PIN, MOTOR1_DIR2_N_PIN, MOTOR1_DIR2_P_PIN>);
+	map.put('y', &buzzerHandler<true>);
+	map.put('z', &buzzerHandler<false>);
 }
 
-template <int PIN_TO_ACTIVATE, int PIN_TO_DEACTIVATE>
-void changePinStatus(String string){
-	digitalWrite(PIN_TO_DEACTIVATE, LOW);
-	digitalWrite(PIN_TO_ACTIVATE, HIGH);
+template <int N_TO_ACTIVATE, int P_TO_ACTIVATE, int N_TO_DEACTIVATE, int P_TO_DEACTIVATE>
+void activeDirection(String string){
+	deactivate<N_TO_DEACTIVATE, P_TO_DEACTIVATE>();
+	activate<N_TO_ACTIVATE, P_TO_ACTIVATE>();
 }
 
-void stopAll(String string){
-	digitalWrite(MOTOR1_DIR1_PIN, LOW);
-	digitalWrite(MOTOR1_DIR2_PIN, LOW);
-	digitalWrite(MOTOR2_DIR1_PIN, LOW);
-	digitalWrite(MOTOR2_DIR2_PIN, LOW);
+template <int N1, int P1, int N2, int P2>
+void deactivateMotors(String string){
+	deactivate<N1, P1>();
+	deactivate<N2, P2>();
+}
+
+template <int N_MOS_PIN, int P_MOS_PIN>
+void activate(){
+	digitalWrite(N_MOS_PIN, HIGH);
+	digitalWrite(P_MOS_PIN, LOW);
+}
+
+template <int N_MOS_PIN, int P_MOS_PIN>
+void deactivate(){
+	digitalWrite(N_MOS_PIN, LOW);
+	digitalWrite(P_MOS_PIN, HIGH);
+}
+
+template <bool TODO>
+void buzzerHandler(String string){
+	if(TODO)
+		digitalWrite(BUZZER_PIN, HIGH);
+	else
+		digitalWrite(BUZZER_PIN, LOW);
 }
