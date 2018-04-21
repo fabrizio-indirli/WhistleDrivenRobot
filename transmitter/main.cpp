@@ -57,6 +57,8 @@ static float32_t fundamentalFreqAmplitude=0; //stores the amplitude of the last 
 static float32_t freq=0; //stores frequency of the last audio sample acquired
 static int overThreshold = 0; //each time a new sample is analyzed,this will be set to 1 if the sample's amplitude > AMPLITUDE_THRESHOLD
 
+SerialPort serialbt; //serial port used for the bluetooth communication (PA2/PA3)
+
 void callback()
 {//function that is called each time a new audio sample has been acquired and processed
 //when this function is called, the variables "freq" and "fundamentalFreqAmplitude" already contain
@@ -69,7 +71,7 @@ void callback()
             //if the frequency of the detected sound is between the FORWARD_MIN_FREQ and FORWARD_MAX_FREQ values, move forward
             greenLed::high();
 
-            //insert here call to function that sends the 'move forward' command over bluetooth to the receiver
+            serial.write("1\r\n");//sends the 'move forward' command over bluetooth to the receiver
 
             strcpy(commandString, "move forward");
     }
@@ -77,7 +79,7 @@ void callback()
             //if the frequency of the detected sound is between the TURNLEFT frequency values, turn left
             greenLed::high();
 
-            //insert here call to function that sends the 'turn left' command over bluetooth to the receiver
+            serial.write("2\r\n");//sends the 'turn left' command over bluetooth to the receiver
 
             strcpy(commandString, "turn left");
     }
@@ -85,7 +87,7 @@ void callback()
             //if the frequency of the detected sound is between the TURNRIGHT frequency values, turn right
             greenLed::high();
 
-            //insert here call to function that sends the 'turn right' command over bluetooth to the receiver
+            serial.write("3\r\n");//sends the 'turn right' command over bluetooth to the receiver
 
             strcpy(commandString, "turn right");
     }
@@ -93,7 +95,7 @@ void callback()
             //if the frequency of the detected sound is between the BACKWARD_MIN_FREQ and BACKWARD_MAX_FREQ values, move backwards
             greenLed::high();
 
-            //insert here call to function that sends the 'move backwards' command over bluetooth to the receiver
+            serial.write("4\r\n");//sends the 'move backwards' command over bluetooth to the receiver
 
             strcpy(commandString, "move backwards");
     }
