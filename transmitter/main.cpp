@@ -2,6 +2,7 @@
 #include "miosix.h"
 #include <string>
 #include "freq_recognition.h"
+#include <util/lcd44780.h>
 #include <stdio.h>
 
 #define SAMPLES 8192 //audio samples acquired each time
@@ -34,81 +35,101 @@ using namespace miosix;
 
 
 char commandString[30];
-typedef Gpio<GPIOD_BASE,12>  greenLed; //used to notify that the mic has acquired a sound whose amplitude is > AMPLITUDE_THRESHOLD
-typedef Gpio<GPIOD_BASE,2>  leftEngineForward; //PD2 pin commands forward movement of the left engine
-typedef Gpio<GPIOD_BASE,6>  leftEngineBackward; //PD6 pin commands backward movement of the left engine
-typedef Gpio<GPIOD_BASE,3>  rightEngineForward; //PD3 pin commands forward movement of the right engine
-typedef Gpio<GPIOD_BASE,4>  rightEngineBackward; //PD4 pin commands backward movement of the right engine
+
+typedef Gpio<GPIOD_BASE,12>  greenLed; //on when a valid command is generated
+
+//pins to drive the hd44780 display
+typedef Gpio<GPIOE_BASE,11> d4; //connect display's d4 pin (pin 11) to PE11 port of the board
+typedef Gpio<GPIOE_BASE,12> d5; //connect display's d5 pin (pin 12) to PE12 port of the board
+typedef Gpio<GPIOE_BASE,13> d6; //connect display's d6 pin (pin 13) to PE13 port of the board
+typedef Gpio<GPIOE_BASE,14> d7; //connect display's d7 pin (pin 14) to PE14 port of the board
+typedef Gpio<GPIOE_BASE,7> rs; //connect display's rs pin (pin 4) to PE7 port of the board
+typedef Gpio<GPIOE_BASE,8> e; //connect display's E pin (pin 6) to PE8 port of the board
+//other connections for the display: connect VSS (pin 1) to GND
+//connect VDD (pin 2) of the display to 5V
+//connect display's V0 (pin 3) to the center tap of a potentiometer with the other two ends connected to 5V and GND
+//connect display's RW (pin 5) to GND
+//if present, connect display's pin A (pin 15) to 3.3V and pin K (PIN 16) to GND
+
+Lcd44780* display; //object that commands the HD44780 display
+
 static float32_t fundamentalFreqAmplitude=0; //stores the amplitude of the last audio sample acquired
 static float32_t freq=0; //stores frequency of the last audio sample acquired
+static int overThreshold = 0; //each time a new sample is analyzed,this will be set to 1 if the sample's amplitude > AMPLITUDE_THRESHOLD
 
 void callback()
 {//function that is called each time a new audio sample has been acquired and processed
 //when this function is called, the variables "freq" and "fundamentalFreqAmplitude" already contain
 //the frequency and the amplitude of the last acquired sample, respectively
 
-        if(fundamentalFreqAmplitude>AMPLITUDE_THRESHOLD && freq < FORWARD_MAX_FREQ && freq > FORWARD_MIN_FREQ) {
+    if(fundamentalFreqAmplitude>AMPLITUDE_THRESHOLD) overThreshold=1;
+    else overThreshold=0;
+
+    if(overThreshold && freq < FORWARD_MAX_FREQ && freq > FORWARD_MIN_FREQ) {
             //if the frequency of the detected sound is between the FORWARD_MIN_FREQ and FORWARD_MAX_FREQ values, move forward
             greenLed::high();
-            leftEngineForward::high();
-            leftEngineBackward::low();
-            rightEngineForward::high();
-            rightEngineBackward::low();
+
+            //insert here call to function that sends the 'move forward' command over bluetooth to the receiver
+
             strcpy(commandString, "move forward");
     }
-    else if(fundamentalFreqAmplitude>AMPLITUDE_THRESHOLD && freq>TURNLEFT_MIN_FREQ && freq < TURNLEFT_MAX_FREQ) {
+    else if(overThreshold && freq>TURNLEFT_MIN_FREQ && freq < TURNLEFT_MAX_FREQ) {
             //if the frequency of the detected sound is between the TURNLEFT frequency values, turn left
             greenLed::high();
-            leftEngineForward::low();
-            leftEngineBackward::low();
-            rightEngineForward::high();
-            rightEngineBackward::low();
+
+            //insert here call to function that sends the 'turn left' command over bluetooth to the receiver
+
             strcpy(commandString, "turn left");
     }
-    else if(fundamentalFreqAmplitude>AMPLITUDE_THRESHOLD && freq>TURNRIGHT_MIN_FREQ && freq < TURNRIGHT_MAX_FREQ) {
+    else if(overThreshold && freq>TURNRIGHT_MIN_FREQ && freq < TURNRIGHT_MAX_FREQ) {
             //if the frequency of the detected sound is between the TURNRIGHT frequency values, turn right
             greenLed::high();
-            leftEngineForward::high();
-            leftEngineBackward::low();
-            rightEngineForward::low();
-            rightEngineBackward::low();
+
+            //insert here call to function that sends the 'turn right' command over bluetooth to the receiver
+
             strcpy(commandString, "turn right");
     }
-    else if(fundamentalFreqAmplitude>AMPLITUDE_THRESHOLD && freq>BACKWARD_MIN_FREQ && freq<BACKWARD_MAX_FREQ) {
+    else if(overThreshold && freq>BACKWARD_MIN_FREQ && freq<BACKWARD_MAX_FREQ) {
             //if the frequency of the detected sound is between the BACKWARD_MIN_FREQ and BACKWARD_MAX_FREQ values, move backwards
             greenLed::high();
-            leftEngineForward::low();
-            leftEngineBackward::high();
-            rightEngineForward::low();
-            rightEngineBackward::high();
+
+            //insert here call to function that sends the 'move backwards' command over bluetooth to the receiver
+
             strcpy(commandString, "move backwards");
     }
     else {//if the sound is not strong enough, or if the frequency is not in the accepted ranges, stop all the engines
             greenLed::low();
-            leftEngineForward::low();
-            leftEngineBackward::low();
-            rightEngineForward::low();
-            rightEngineBackward::low();
-            strcpy(commandString, "none");
+
+            strcpy(commandString, "No command");
     }
+
+    //print on USB serial (for debugging)
     printf("\nFrequency: %.2f hz, Amplitude: %.2f, Command: %s", freq, fundamentalFreqAmplitude, commandString);
+
+    //print on display
+    display->clear();
+    display->go(0,0);
+    if(overThreshold) display->printf("Freq: %.1f Hz", freq);
+    else display->printf("Volume too low", freq);
+    display->go(0,1);
+    display->printf("%s", commandString);
 }
 
 int main()
-{   //greenLed and engine pins setup
+{   //greenLed setup
 	greenLed::mode(Mode::OUTPUT);
 	greenLed::low();
-	leftEngineForward::mode(Mode::OUTPUT);
-	leftEngineForward::low();
-	leftEngineBackward::mode(Mode::OUTPUT);
-	leftEngineBackward::low();
-	rightEngineForward::mode(Mode::OUTPUT);
-	rightEngineForward::low();
-	rightEngineBackward::mode(Mode::OUTPUT);
-	rightEngineBackward::low();
 
+    //initialize display
+    display = new Lcd44780(rs::getPin(), e::getPin(), d4::getPin(), d5::getPin(), d6::getPin(), d7::getPin(), 2, 16);
+    display->clear();
+    display->go(0,0);
+
+    //start audio frequency recognition
     startAcquisition(&callback, &freq, &fundamentalFreqAmplitude);
-    while(true);
+
+    while(true); //this in necessary because startAcquisition() works in another thread and it is non-blocking
+    //maybe can be replaced with Thread::wait() ?
 }
 
 
