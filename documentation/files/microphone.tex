@@ -34,7 +34,7 @@ The sampling frequency of the ADC is 44000 Hz. \\
 In order to process the data, it has to be converted in PCM format: this is done by doing \textbf{CIC filtering}, with a decimation factor of 16 (each 16-bits sequence of 1-bit PDM samples is converted in one 16-bit PCM sample).\\
 Then, an FFT analysis is performed on 4096 samples at a time to extract the fundamental frequency and the amplitude of the sound.
 
-\subsection{Microphone initialization}
+\subsubsection{Microphone initialization}
 The initialization of the sound acquisition system comprehends several steps:
 \begin{enumerate}
 	\item SPI, DMA and General Purpose ports B and C are enabled through RCC
@@ -44,7 +44,7 @@ The initialization of the sound acquisition system comprehends several steps:
 	
 \end{enumerate}
 
-\subsection{Sound acquisition and processing}
+\subsubsection{Sound acquisition and processing}
 Each time a new block of samples is read, the \textit{freq\_recognition} library:
 \begin{enumerate}
 	\item Reads blocks of 16 bits from SPI and transfers them in RAM through DMA
@@ -74,6 +74,7 @@ The \textit{freq\_recognition} library provides the following functions:
 		\item \textbf{freqVar}: pointer to the float32\_t where the detected frequency of each sample will be stored
 		\item \textbf{amplitudeVar}: pointer to the float32\_t where the detected amplitude of each sample will be stored
 	\end{itemize}
+\item \textbf{void stopAcquisition()}: stops the acquisition of new samples.
 \end{itemize}
 
 \subsubsection{How it works}
@@ -99,10 +100,82 @@ The usage of the library is very simple:
 \begin{enumerate}
 	\item Add the \textbf{freq\_recognition.cpp} and \textbf{freq\_recognition.h} files in the folder of the other source files of the project, and add the \textit{freq\_recognition.cpp} entry in the \textbf{SRC} line of the makefile
 	\item Add the \textit{arm\_bitereversal.c}, \textit{arm\_cfft\_radix4\_f32.c}, \textit{arm\_cfft\_radix4\_init\_f32.c} and \textit{arm\_cmplx\_mag\_f32.c} libraries to your project (these libraries are required by \textit{freq\_recognition.cpp})
-	\item Add the \textit{\#include "freq\_recognition.h"} line at the start of the source file that will use the Microphone object
+	\item Add the \textit{\#include "freq\_recognition.h"} line at the start of the source file that will use the library
 	\item Declare 2 float32\_t variables to store the frequency and the amplitude of the last acquired sample
 	\item Define a void callback function without parameters
 	\item Start the acquisition by calling the \textit{startAcquisition(\&callback, \&freq, \&amplitude)} method, passing to it the addresses of the callback function and of the 2 variables. This method is non-blocking (operations are performed in other threads).
 
 \end{enumerate}
 Each time a new block of 16-bit PDM samples has been acquired, the driver will perform an FFT analysis on it and will write the frequency and the amplitude of the sample in the chosen variables, then the callback function will be called automatically. This process will be iterated continuously until the \textit{stopAcquisition()} function is called.
+
+\subsection{Displaying the recognized frequency}
+The transmitter is equipped with a standard \textbf{HD44780 LCD display} with 2 rows and 16 columns, that is used to print the currently recognized frequency and the associated command (if any).
+
+\subsubsection{Connections}
+The display has 16 pins that are connected in this way:
+
+\begin{tabular}{|c|c|}
+	\hline 
+	\textbf{LCD pin} & \textbf{Connected to} \\ 
+	\hline 
+	(1) Vss & GND \\ 
+	\hline 
+	(2) Vdd & 5V \\ 
+	\hline 
+	(3) V0 & center tap of a potentiometer between 5V and GND \\ 
+	\hline 
+	(4) RS & PE7 pin of the Discovery board \\ 
+	\hline 
+	(5) RW & GND \\ 
+	\hline 
+	(6) E & PE8 pin of the Discovery board \\ 
+	\hline 
+	(7) D0 & 5V \\ 
+	\hline 
+	(8) D1 & 5V \\ 
+	\hline 
+	(9) D2 & 5V \\ 
+	\hline 
+	(10) D3 & 5V \\ 
+	\hline 
+	(11) D4 & PE11 pin of the Discovery board \\ 
+	\hline 
+	(12) D5 & PE12 pin of the Discovery board \\ 
+	\hline 
+	(13) D6 & PE13 pin of the Discovery board \\ 
+	\hline 
+	(14) D7 & PE14 pin of the Discovery board \\ 
+	\hline 
+	(15) A & 3.3V \\ 
+	\hline 
+	(16) K & GND \\ 
+	\hline 
+\end{tabular} 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]
+	{files/images/display_connections.jpg}
+	\caption{Schema of the display's connections.}
+\end{figure}
+
+\subsubsection{Driver and usage}
+The driver of the display for Miosix is available in the OS itself: to use it, the \textit{utils/lcd44780.h} library has been included in the main program. \\
+ In the software, the display is represented with an instance of the Lcd44780 class, whose constructor needs to know the pins of the board on which the RS, E, D4, D5, D6, D7 display pins are connected. \\
+ Then, we can use the methods of the Lcd44780 object to print on the screen:
+ \begin{itemize}
+ 	\item \textit{clear()} to wipe the content of the screen
+ 	\item \textit{go(column, row)} moves the cursor to the specified position
+ 	\item \textit{printf()} prints to the display, using the standard C formatting rules
+ \end{itemize}
+For more information, read the official tutorial on the Miosix website: \\ \textit{https://miosix.org/wiki/index.php?title=HD44780\_LCD\_tutorial}\\
+
+In our project, the main() function instantiates a Lcd44780 object called \textit{display}, and calls its methods \textit{clear()} and \textit{go(0,0)} to initialize it.
+Then, each time the callback function is called from the frequency recognition library, it uses the \textit{printf()} method to print the recognized frequency and the associated command; if the volume of the acquired sample is too low, "Volume too low" will be printed on the screen instead of the frequency.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]
+	{files/images/display_on.jpg}
+	\caption{Display showing the frequency and the associated command.}
+\end{figure}
