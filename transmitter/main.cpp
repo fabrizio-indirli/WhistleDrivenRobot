@@ -4,7 +4,6 @@
 #include "freq_recognition.h"
 #include <util/lcd44780.h>
 #include <stdio.h>
-#include "serial.h"
 
 #define SAMPLES 8192 //audio samples acquired each time
 #define FFT_SIZE SAMPLES/2 //we store only the real parts of the samples
@@ -58,8 +57,6 @@ static float32_t fundamentalFreqAmplitude=0; //stores the amplitude of the last 
 static float32_t freq=0; //stores frequency of the last audio sample acquired
 static int overThreshold = 0; //each time a new sample is analyzed,this will be set to 1 if the sample's amplitude > AMPLITUDE_THRESHOLD
 
-SerialPort serial; //serial port used for the bluetooth communication (PA2/PA3)
-
 void callback()
 {//function that is called each time a new audio sample has been acquired and processed
 //when this function is called, the variables "freq" and "fundamentalFreqAmplitude" already contain
@@ -72,7 +69,7 @@ void callback()
             //if the frequency of the detected sound is between the FORWARD_MIN_FREQ and FORWARD_MAX_FREQ values, move forward
             greenLed::high();
 
-            serial.write("1");//sends the 'move forward' command over bluetooth to the receiver
+            printf("1");//sends the 'move forward' command over bluetooth to the receiver
 
             strcpy(commandString, "move forward");
     }
@@ -80,7 +77,7 @@ void callback()
             //if the frequency of the detected sound is between the TURNLEFT frequency values, turn left
             greenLed::high();
 
-            serial.write("2");//sends the 'turn left' command over bluetooth to the receiver
+            printf("2");//sends the 'turn left' command over bluetooth to the receiver
 
             strcpy(commandString, "turn left");
     }
@@ -88,7 +85,7 @@ void callback()
             //if the frequency of the detected sound is between the TURNRIGHT frequency values, turn right
             greenLed::high();
 
-            serial.write("3");//sends the 'turn right' command over bluetooth to the receiver
+            printf("3");//sends the 'turn right' command over bluetooth to the receiver
 
             strcpy(commandString, "turn right");
     }
@@ -96,7 +93,7 @@ void callback()
             //if the frequency of the detected sound is between the BACKWARD_MIN_FREQ and BACKWARD_MAX_FREQ values, move backwards
             greenLed::high();
 
-            serial.write("4");//sends the 'move backwards' command over bluetooth to the receiver
+            printf("4");//sends the 'move backwards' command over bluetooth to the receiver
 
             strcpy(commandString, "move backwards");
     }
