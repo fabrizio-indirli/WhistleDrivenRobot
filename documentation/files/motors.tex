@@ -1,14 +1,14 @@
 The receiver is basically a robot driven by the commands from the Discovery board, which communicates through the Bluetooth channel. The receiver is provided by an opportune object to take the data, ignore the eventual dirty characters, and execute what is required.
 
-\subsubsection{Main parts}
+\subsection{Main parts}
 The robot is divided in three main parts:
 \begin{itemize}
-	\item The serial communication: this is the section that is in charge of receiving and sending commands, encapsulating all the code within an object and, consequently, allowing changes and extensions;
-	\item The Executer: this is the object that, given a command stored in a string, looks for a function able to execute it and, eventually, runs it;
+	\item The serial communication: this is the section that is in charge of receiving and sending strings, encapsulating all the code within an object and, consequently, allowing changes and extensions;
+	\item The Executer: this is the object that, given a command stored in a string, looks for a function able to execute it and, in positive case, runs it;
 	\item The controller: this is the part performed by the Arduino \textit{loop} method and provides to invoke the serial communication methods, taking the commands strings and giving them to the executer.
 \end{itemize}
 
-\subsection{The Serial Communication}
+\subsection{The serial communication}
 \begin{figure}[h!]
 	\centering
 	\hspace*{-0.25 \textwidth}\includegraphics[width= 1.5\textwidth]
@@ -27,7 +27,7 @@ The \textit{SerialCommunication} class is a generic structure that takes the cha
 \subsubsection{\textit{StringHandler}}
 All the received characters are temporary stored in an apposite data structure, called \textit{StringHandler}. This class offers some methods to manipulate these characters, allowing to know if a string is fully received and, eventually, withdraw it. It's not necessary that the string is fully received to transform all the received character in a string. After the withdraw method invocation, the object resets itself.
 
-\subsubsection{\textit{SerialConnection} extensions}
+\subsubsection{\textit{SerialCommunication} extensions}
 In the Figure \ref{fig:connection}, in particular in the parent class, two methods are indicate as virtual, since their implementation depends by the connection type used. Consequently, the \textit{SerialCommunication} class was extended by \textit{BTSerialCommunication} and by \textit{USBSerialCommunication}, which implement these two methods, according to their specification and using proper attributes to perform these actions.\\
 In the communication, the class \textit{USBSerialCommunication} and the \textit{print} method of \textit{BTSerialCommunication} are implemented but never used. They were added for debug features and for future expansion, made easier by this organization.
 
@@ -38,7 +38,7 @@ This structure allows to extends the robot with future modules, without changing
 \subsubsection{The used Hash map}
 The quoted Hash map is not a class from the library but a proper class implemented in this code. It is not a perfect Hash function since it uses the module operation to compute the indexes but this choice was made to avoid useless computational time wastes. It is however possible change it since it is fully encapsulated in a module.\\
 
-\subsubsection{Used commands}
+\subsubsection{The used commands}
 This robot uses the following commands:
 ???
 
@@ -49,5 +49,5 @@ This robot uses the following commands:
 	{files/images/ReceiverScheme}
 	\caption{The motors circuit scheme of the robot.}
 \end{figure}
-For this robot, is necessary that both the motors rotate in two different directions, consequently, it is implemented two basic \textit{H bridges} to perform this purpose. To limit the use of some inverters, it is necessary uses two pins for each motor direction and so eight Arduino pins are used to handle the movements.\\
+For this robot, is necessary that both the motors rotate in two different directions, consequently, it is implemented two basic \textit{H bridges} to perform this purpose. To avoid the use of inverters, it is necessary uses two pins for each motor direction and so eight Arduino pins are used to handle the movements.\\
 In other two pins, the Bluethooth module HC05 text and read pins are connected, despite it isn't shown in the circuit scheme. Also the LEDs and the eventual buzzer aren't shown.
