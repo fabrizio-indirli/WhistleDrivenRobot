@@ -4,6 +4,7 @@
 #include "freq_recognition.h"
 #include <util/lcd44780.h>
 #include <stdio.h>
+#include "serial.h"
 
 #define SAMPLES 8192 //audio samples acquired each time
 #define FFT_SIZE SAMPLES/2 //we store only the real parts of the samples
@@ -57,7 +58,7 @@ static float32_t fundamentalFreqAmplitude=0; //stores the amplitude of the last 
 static float32_t freq=0; //stores frequency of the last audio sample acquired
 static int overThreshold = 0; //each time a new sample is analyzed,this will be set to 1 if the sample's amplitude > AMPLITUDE_THRESHOLD
 
-SerialPort serialbt; //serial port used for the bluetooth communication (PA2/PA3)
+SerialPort serial; //serial port used for the bluetooth communication (PA2/PA3)
 
 void callback()
 {//function that is called each time a new audio sample has been acquired and processed
