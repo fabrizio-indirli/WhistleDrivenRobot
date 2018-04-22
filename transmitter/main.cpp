@@ -104,7 +104,7 @@ void callback()
     }
 
     //print on USB serial (for debugging)
-    printf("\nFrequency: %.2f hz, Amplitude: %.2f, Command: %s", freq, fundamentalFreqAmplitude, commandString);
+    //ONLY FOR DEBUG// printf("\nFrequency: %.2f hz, Amplitude: %.2f, Command: %s", freq, fundamentalFreqAmplitude, commandString);
 
     //print on display
     display->clear();
