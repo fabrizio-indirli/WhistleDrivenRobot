@@ -32,7 +32,7 @@ In the Figure \ref{fig:connection}, in particular in the parent class, two metho
 In the communication, the class \textit{USBSerialCommunication} and the \textit{print} method of \textit{BTSerialCommunication} are implemented but never used. They were added for debug features and for future expansion, made easier by this organization.
 
 \subsection{The Executer}
-The \textit{Executer} interprets the received commands by the connection. A command is a string that has, as first character, a proper name and, subsequently, some parameters for that specific command. Its name is used to get, with a constant time through an Hash map, the method to invoke for executing that specific command. This class expose only a method, the one invoked passing the string as parameter and that researches and executes the opportune function.\\*
+The \textit{Executer} interprets the received commands by the connection. A command is a string that has, as first character, a proper name and, subsequently, some parameters for that specific command. Its name is used to get, with a constant time through an Hash map, the method to invoke for executing that specific command. This class exposes only a method, the one invoked passing the string as parameter and that researches and executes the opportune function.\\*
 This structure allows to extends the robot with future modules, without changing this object but just adding the new function pointers to the map.\\*
 
 \subsubsection{The used Hash map}
