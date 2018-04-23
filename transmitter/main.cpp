@@ -11,7 +11,7 @@
 //this is the minimum amplitude of the acquired sound in order to activate the engines
 #define AMPLITUDE_THRESHOLD 5000000
 
-//if the sound's frequency is below these 2 values, the car will move forward
+//if the sound's frequency is between these 2 values, the car will move forward
 #define FORWARD_MIN_FREQ 300
 #define FORWARD_MAX_FREQ 1000
 
@@ -69,7 +69,8 @@ void callback()
             //if the frequency of the detected sound is between the FORWARD_MIN_FREQ and FORWARD_MAX_FREQ values, move forward
             greenLed::high();
 
-            printf("1");//sends the 'move forward' command over bluetooth to the receiver
+           printf("\n1");//sends the 'move forward' command over bluetooth to the receiver
+
 
             strcpy(commandString, "move forward");
     }
@@ -77,7 +78,8 @@ void callback()
             //if the frequency of the detected sound is between the TURNLEFT frequency values, turn left
             greenLed::high();
 
-            printf("2");//sends the 'turn left' command over bluetooth to the receiver
+            printf("\n2");//sends the 'turn left' command over bluetooth to the receiver
+
 
             strcpy(commandString, "turn left");
     }
@@ -85,7 +87,8 @@ void callback()
             //if the frequency of the detected sound is between the TURNRIGHT frequency values, turn right
             greenLed::high();
 
-            printf("3");//sends the 'turn right' command over bluetooth to the receiver
+            printf("\n3");//sends the 'turn right' command over bluetooth to the receiver
+
 
             strcpy(commandString, "turn right");
     }
@@ -93,7 +96,8 @@ void callback()
             //if the frequency of the detected sound is between the BACKWARD_MIN_FREQ and BACKWARD_MAX_FREQ values, move backwards
             greenLed::high();
 
-            printf("4");//sends the 'move backwards' command over bluetooth to the receiver
+            printf("\n4");//sends the 'move backwards' command over bluetooth to the receiver
+
 
             strcpy(commandString, "move backwards");
     }
@@ -104,7 +108,7 @@ void callback()
     }
 
     //print on USB serial (for debugging)
-    //ONLY FOR DEBUG// printf("\nFrequency: %.2f hz, Amplitude: %.2f, Command: %s", freq, fundamentalFreqAmplitude, commandString);
+    //printf("\nFrequency: %.2f hz, Amplitude: %.2f, Command: %s", freq, fundamentalFreqAmplitude, commandString);
 
     //print on display
     display->clear();
