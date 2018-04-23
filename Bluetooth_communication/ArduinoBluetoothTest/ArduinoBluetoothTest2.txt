@@ -47,7 +47,7 @@ void loop() {
     Serial.println("Move backward");
     break;
   default:
-    Serial.println(command);
+    //Serial.println(command);
     break;
     }
   }
