@@ -106,7 +106,8 @@ After we run the Serial Monitor, we need to select \textit{“Both NL and CR”}
 
 \subsection{How to pair the two modules}
 
-\subsubsection{Slave configuration (this HC-05 module will be used on the Arduino Board)}
+\subsubsection{Slave configuration}
+\textbf{This HC-05 module will be used on the Arduino Board.}\\
 If we type just \textit{“AT”} which is a test command we should get back the message \textit{“OK”}.\\
 Then if we type \textit{“AT+UART?”} we should get back the massage that shows the default baud rate which is \textit{9600}. (\textbf{REMEMBER, we will use the same baud rate on the Arduino board)}\\
 Then if we type \textit{“AT+ROLE?”} we will get back a massage \textit{“+ROLE=0”} which means that the Bluetooth device is in slave mode. If we type \textit{“AT+ADDR?”} we will get back the address of the Bluetooth module and it should looks something like this: 18:e4:34cldd. \\
@@ -118,7 +119,8 @@ Now we need to write down this address, as we will need it when configuring the 
 	\caption{Slave configuration of the HC-05 module trough serial monitor.}
 \end{figure}
 
-\subsubsection{Master configuration (this HC-05 module will be used on the STM32F407 Discovery Board)}
+\subsubsection{Master configuration}
+\textbf{This HC-05 module will be used on the STM32F407 Discovery Board.}\\
 The STM32F407 uses \textit{19200} baud rate to communicate on USART2, so we need to change the hc-05 baud rate, in addition to pair the master with his slave.\\
 To speedup the baudrate to \textit{19200 bauds}, we have to type \textit{“AT+UART=19200,0,0”}.\\
 Then by typing \textit{“AT+ROLE=1”} we will set the Bluetooth module as a master device. After this using the \textit{“AT+CMODE=0”} we will set the connect mode to “fixed address” and using the \textit{“AT+BIND=XX,XXXX,XX”} command we will set the address of the slave device that we previously wrote down.\\ \textbf{(Use commas, instead of colons!)}\\
