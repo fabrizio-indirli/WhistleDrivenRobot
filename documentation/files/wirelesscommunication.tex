@@ -69,7 +69,7 @@ To activate AT mode on these HC-05 modules, pin 34 needs to be HIGH on power up.
 	\item hold the button switch closed when starting the module.
 	
 \end{itemize}
-\textbf{METHOD 1} - Using the button switch to enter AT command mode using 38400 baud rate:
+\textbf{METHOD 1} - Using the button switch to enter AT command mode:
 \begin{enumerate}
 	\item remove power from the module
 	\item hold the small button switch closed while powering on the module.
@@ -78,7 +78,7 @@ To activate AT mode on these HC-05 modules, pin 34 needs to be HIGH on power up.
 	\item when you see the LED come on you can release the button switch.
 \end{enumerate}
 If the Bluetooth module led is flashing every 2 seconds (slower than usual) that means that we have successfully entered in the AT command mode.\\
-\textbf{METHOD 2} - Using pin 34 to enter full AT command mode using 38400 baud rate.
+\textbf{METHOD 2} - Using pin 34 to enter full AT command mode:
 \begin{enumerate}
 	\item remove power from the module
 	\item make a connection between pin 34 and +3.3v
@@ -109,14 +109,14 @@ Now we need to write down this address, as we will need it when configuring the 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]
-	{files/images/hc05_slave}
+	{files/images/hc05_slave2}
 	\caption{Slave configuration of the hc-05 module trough serial monitor.}
 \end{figure}
 
 \subsubsection{Master configuration (this hc-05 module will be used on the STM32F407 Discovery Board)}
 The STM32F407 uses \textit{19200} baud rate to communicate on USART2, so we need to change the hc-05 baud rate, in addition to pair the master with his slave.\\
 To speedup the baudrate to \textit{19200 bauds}, we have to type \textit{“AT+UART=19200,0,0”}.\\
-Then by typing \textit{“AT+ROLE=1”} we will set the Bluetooth module as a master device. After this using the \textit{“AT+CMODE=0”} we will set the connect mode to “fixed address” and using the \textit{“AT+BIND=XX,XXXX,XX”} command we will set the address of the slave device that we previously wrote down.\\ \textbf{(Use commas, instead of colons!!)}\\
+Then by typing \textit{“AT+ROLE=1”} we will set the Bluetooth module as a master device. After this using the \textit{“AT+CMODE=0”} we will set the connect mode to “fixed address” and using the \textit{“AT+BIND=XX,XXXX,XX”} command we will set the address of the slave device that we previously wrote down.\\ \textbf{(Use commas, instead of colons!)}\\
 \textit{“AT+BIND=18,e4,34cldd”} in our case.\\
 \begin{figure}[H]
 	\centering
@@ -126,17 +126,13 @@ Then by typing \textit{“AT+ROLE=1”} we will set the Bluetooth module as a ma
 \end{figure}
  
 \subsection{STM32F407 CODE (Transmitter)}
-The code loaded on the STM32F407 board is an adaptation of the code "serial" that we saw at lesson.\\
-The code uses the USART2 channel to communicate with the HC-05 module.\\
-So, we should link the hc-05 rx pin to PA2 pin (USART2 TX) and hc-05 tx pin to PA3 (USART2 RX)\\
-PA2 (USART2 TX)\\
-PA3 (USART2 RX)\\
-In our project, we only send strings from SMT32F407 to Arduino (not vice versa) so the code will only write on the PA2 pin. (It is not necessary to link hc-05 tx to PA3 pin for our purpose)\\
-To send a string, we just need to use the “write” function implemented in serial.cpp class.\\
-
+The code loaded on the STM32F407 uses the USART2 channel to communicate with the HC-05 module.\\
+So, we should link the HC-05 Rx pin to \textbf{PA2 pin (USART2 TX)} and HC-05 Tx pin to \textbf{PA3 (USART2 RX)}\\
+In our project, we only send strings from SMT32F407 to Arduino (not vice versa) so the code will only write on the PA2 pin. (It is not necessary to link HC-05 Tx to PA3 pin for our purpose)\\
+To send a string, we just need to use the “printf” function implemented in the miosix kernel.\\
 \subsection{ARDUINO CODE (Receiver)}
-“ArduinoBluetoothTest.txt” contains a sketch with allow us to send and receive strings trough Bluetooth communication.\\
-We decided to use PIN 12 (TX) and PIN 11 (RX) to communicate with the hc-05 module.\\
-So, we should link the hc-05 rx pin to PIN 12 and hc-05 tx pin to PIN 11.\\
-In our project we only send strings from SMT32F407 to Arduino (not viceversa) so the code will only read from PIN 11. (It’s not necessary to link hc-05 rx to PIN 12 pin for our purpose)\\
-To read a string from the hc-05 on Arduino is enough to use the read() function of the SoftwareSerial class.\\
+\textit{“ArduinoBluetoothTest.txt”} contains a sketch with allow us to send and receive strings trough Bluetooth communication.\\
+We decided to use \textbf{PIN 12 (TX)} and \textbf{PIN 11 (RX)} to communicate with the HC-05 module.\\
+So, we should link the HC-05 Rx pin to PIN 12 and HC-05 Tx pin to PIN 11.\\
+In our project we only send strings from SMT32F407 to Arduino (not vice versa) so the code will only read from PIN 11. (It’s not necessary to link HC-05 Rx to PIN 12 pin for our purpose)\\
+To read a string from the HC-05 on Arduino is enough to use the \textit{read()} function of the SoftwareSerial class.\\
