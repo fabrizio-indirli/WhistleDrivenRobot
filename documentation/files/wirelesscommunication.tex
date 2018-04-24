@@ -10,10 +10,10 @@ HC-05 module is an easy to use Bluetooth SPP (Serial Port Protocol) module, desi
 \end{figure}
 
 \subsection{COMMAND and DATA TRANSFER MODES}
-The module has two modes of operation: Command Mode where we can send AT commands to it, and Data Mode where it transmits and receives data to another Bluetooth module.\\
+The module has two modes of operation: \textbf{Command Mode} where we can send AT commands to it, and \textbf{Data Mode} where it transmits and receives data to another Bluetooth module.\\
 
 \textbf{Default Settings}\\
-The default settings for new modules are
+The default settings for new modules are:
 \begin{itemize}
 \item Name = HC-05
 \item Password = 1234
@@ -91,11 +91,20 @@ If the Bluetooth module led is flashing every 2 seconds (slower than usual) that
 	\caption{Example of connection bewteen pin 34 and +3.3v.}
 \end{figure}
 If the Bluetooth module led is flashing every 2 seconds (slower than usual) that means that we have successfully entered in the AT command mode.
+prova\\
+prova\\
+prova\\
+prova\\
 
 \subsection{Setup the communication}
-Final scheme:
-STM32F407 -> HC-05 (master)    -->bluetooth communication<--    HC-05 (slave) <- Arduino
+Final scheme:\\
 
+\begin{tabular}{c c c}
+STM32F407  $\rightarrow$ HC-05 (master)&  & HC-05 (slave) $\rightarrow$ Arduino \\
+ & \raisebox{0pt}[0pt][0pt]{
+	\includegraphics{files/images/bluetooth_logo_resize} }
+ & \\
+\end{tabular}
 Once the HC-05 is in Command mode, we can use \textit{“Arduino Serial Monitor”} to set the HC-05 module.\\
 After we run the Serial Monitor, we need to select \textit{“Both NL and CR”}, as well as, \textit{“38400 baud”} which is the default baud rate in command mode. Now, we are ready to send commands.\\
 
