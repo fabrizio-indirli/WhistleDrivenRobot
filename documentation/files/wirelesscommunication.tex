@@ -9,7 +9,7 @@ HC-05 module is an easy to use Bluetooth SPP (Serial Port Protocol) module, desi
 	\caption{View of the surfaces of the HC-05 module.}
 \end{figure}
 
-\subsection{COMMAND and DATA TRANSFER MODES}
+\subsection{Command and Data Transfer modes}
 The module has two modes of operation: \textbf{Command Mode} where we can send AT commands to it, and \textbf{Data Mode} where it transmits and receives data to another Bluetooth module.\\
 
 \textbf{Default Settings}\\
@@ -104,7 +104,7 @@ STM32F407  $\rightarrow$ HC-05 (master)&  & HC-05 (slave) $\rightarrow$ Arduino 
 Once the HC-05 is in Command mode, we can use \textit{“Arduino Serial Monitor”} to set the HC-05 module.\\
 After we run the Serial Monitor, we need to select \textit{“Both NL and CR”}, as well as, \textit{“38400 baud”} which is the default baud rate in command mode. Now, we are ready to send commands.\\
 
-\subsection{HOW TO PAIR THE TWO MODULES}
+\subsection{How to pair the two modules}
 
 \subsubsection{Slave configuration (this HC-05 module will be used on the Arduino Board)}
 If we type just \textit{“AT”} which is a test command we should get back the message \textit{“OK”}.\\
@@ -130,12 +130,12 @@ Then by typing \textit{“AT+ROLE=1”} we will set the Bluetooth module as a ma
 	\caption{Master configuration of the HC-05 module trough serial monitor.}
 \end{figure}
  
-\subsection{STM32F407 CODE (Transmitter)}
+\subsection{STM32F407 code (Transmitter)}
 The code loaded on the STM32F407 uses the USART2 channel to communicate with the HC-05 module.\\
 So, we should link the HC-05 Rx pin to \textbf{PA2 pin (USART2 TX)} and HC-05 Tx pin to \textbf{PA3 (USART2 RX)}\\
 In our project, we only send strings from SMT32F407 to Arduino (not vice versa), so the code will only write on the PA2 pin. (It is not necessary to link HC-05 Tx to PA3 pin for our purpose)\\
 To send a string, we just need to use the “printf” function implemented in the miosix kernel.\\
-\subsection{ARDUINO CODE (Receiver)}
+\subsection{Arduino code (Receiver)}
 \textit{“ArduinoBluetoothTest.txt”} contains a sketch with allow us to send and receive strings trough Bluetooth communication.\\
 We decided to use \textbf{PIN 12 (TX)} and \textbf{PIN 11 (RX)} to communicate with the HC-05 module.\\
 So, we should link the HC-05 Rx pin to PIN 12 and HC-05 Tx pin to PIN 11.\\
