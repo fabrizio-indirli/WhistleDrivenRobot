@@ -34,20 +34,20 @@ void loop() {
     //mostrali nel Serial Monitor
     command = bt.read();
     switch (command) {
-  case '1':
+  case 'f':
     Serial.println("Move forward");
     break;
-  case '2':
+  case 'l':
     Serial.println("Turn left");
     break;
-  case '3':
+  case 'r':
     Serial.println("Turn right");
     break;
-  case '4':
+  case 'b':
     Serial.println("Move backward");
     break;
   default:
-    //Serial.println(command);
+    //Serial.print(command);
     break;
     }
   }
