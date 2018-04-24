@@ -69,7 +69,7 @@ void callback()
             //if the frequency of the detected sound is between the FORWARD_MIN_FREQ and FORWARD_MAX_FREQ values, move forward
             greenLed::high();
 
-           printf("1\n");//sends the 'move forward' command over bluetooth to the receiver
+           printf("f\n");//sends the 'move forward' command over bluetooth to the receiver
 
 
             strcpy(commandString, "move forward");
@@ -78,7 +78,7 @@ void callback()
             //if the frequency of the detected sound is between the TURNLEFT frequency values, turn left
             greenLed::high();
 
-            printf("2\n");//sends the 'turn left' command over bluetooth to the receiver
+            printf("l\n");//sends the 'turn left' command over bluetooth to the receiver
 
 
             strcpy(commandString, "turn left");
@@ -87,7 +87,7 @@ void callback()
             //if the frequency of the detected sound is between the TURNRIGHT frequency values, turn right
             greenLed::high();
 
-            printf("3\n");//sends the 'turn right' command over bluetooth to the receiver
+            printf("r\n");//sends the 'turn right' command over bluetooth to the receiver
 
 
             strcpy(commandString, "turn right");
@@ -96,14 +96,16 @@ void callback()
             //if the frequency of the detected sound is between the BACKWARD_MIN_FREQ and BACKWARD_MAX_FREQ values, move backwards
             greenLed::high();
 
-            printf("4\n");//sends the 'move backwards' command over bluetooth to the receiver
+            printf("b\n");//sends the 'move backwards' command over bluetooth to the receiver
 
 
             strcpy(commandString, "move backwards");
     }
     else {//if the sound is not strong enough, or if the frequency is not in the accepted ranges, stop all the engines
             greenLed::low();
-
+			
+			printf("s\n");
+			
             strcpy(commandString, "No command");
     }
 

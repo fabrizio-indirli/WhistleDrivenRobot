@@ -5,24 +5,27 @@
 #define BT_TX_PIN 12
 #define BT_RX_PIN 11
 
-BTSerialCommunication* btCommunication;
-USBSerialCommunication* usbSerialCommunication;
+SerialCommunication* communication;
 Executer* executer;
 
 void setup() {
-    //btCommunication = new BTSerialCommunication(BT_TX_PIN, BT_RX_PIN);
-    usbSerialCommunication = new USBSerialCommunication();
+    //communication = new BTSerialCommunication(BT_TX_PIN, BT_RX_PIN);
+    communication = new USBSerialCommunication();
     executer = new Executer();
-    String message = "Hi, I'm ready to take commands";
-    usbSerialCommunication->print(&message);
+    String string = "I'm ready";
+    communication->print(&string);
+    pinMode(10, OUTPUT);
 }
 
 void loop() {
-    usbSerialCommunication->updateBuffer();
-
-    if(usbSerialCommunication->isTheLineAllRead()){
-  	    String* string = usbSerialCommunication->getReadLine();
-  	    usbSerialCommunication->print(string);
+    communication->updateBuffer();
+    if(communication->isTheLineAllRead()){
+  	    String* string = communication->getReadLine();
+  	    communication->print(string);
+  	    pinMode(10, HIGH);
+  	    delay(100);
   	    executer->execute(string);
     }
+    
+   pinMode(10, LOW);
 }

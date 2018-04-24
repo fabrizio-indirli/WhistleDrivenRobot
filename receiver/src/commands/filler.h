@@ -12,21 +12,26 @@
 #define MOTOR2_DIR2_N_PIN 8
 #define MOTOR2_DIR2_P_PIN 9
 
-#define BUZZER_PIN 13
-
 void fillHashMap(IntegerHashMap<void (*)(String)>& map);
 
+void forward(String string);
+
+void back(String string);
+
+void right(String string);
+
+void left(String string);
+
+void deactivateAll(String string);
+
 template <int N_TO_ACTIVATE, int P_TO_ACTIVATE, int N_TO_DEACTIVATE, int P_TO_DEACTIVATE>
-void activeDirection(String string);
+void activeDirection();
 
 template <int N1, int P1, int N2, int P2>
-void deactivateMotors(String string);
+void deactivateMotors();
 
 template <int N_MOS_PIN, int P_MOS_PIN>
 void activate();
 
 template <int N_MOS_PIN, int P_MOS_PIN>
 void deactivate();
-
-template <bool TODO>
-void buzzerHandler(String string);
