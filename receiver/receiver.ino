@@ -2,25 +2,21 @@
 #include "src/communication/USBSerialCommunication.h"
 #include "src/hashmap/IntegerHashMap.h"
 #include "src/commands/Executer.h"
-#define BT_TX_PIN 12
-#define BT_RX_PIN 11
 
 SerialCommunication* communication;
 Executer* executer;
 
 void setup() {
-    communication = new BTSerialCommunication(BT_TX_PIN, BT_RX_PIN);
+    communication = new BTSerialCommunication();
     //communication = new USBSerialCommunication();
     executer = new Executer();
-    String string = "I'm ready";
-    communication->print(&string);
+    Serial.begin(9600);
 }
 
 void loop() {
     communication->updateBuffer();
     if(communication->isTheLineAllRead()){
   	    String* string = communication->getReadLine();
-  	    communication->print(string);
   	    executer->execute(string);
     }
 }

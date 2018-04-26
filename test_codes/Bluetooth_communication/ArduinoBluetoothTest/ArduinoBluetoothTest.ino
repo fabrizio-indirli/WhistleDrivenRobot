@@ -46,6 +46,12 @@ void loop() {
   case 'b':
     Serial.println("Move backward");
     break;
+  case 's':
+    Serial.println("STOP");
+    break;
+  case '\n':
+    Serial.println("END");
+    break;
   default:
     //Serial.print(command);
     break;

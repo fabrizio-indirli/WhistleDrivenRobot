@@ -3,6 +3,8 @@
 #include "SerialCommunication.h"
 #ifndef BTSERIALCOMMUNICATION_H_
 #define BTSERIALCOMMUNICATION_H_
+#define BT_TX_PIN 12
+#define BT_RX_PIN 11
 
 /**
  * This object is used to handle a Bluetooth serial connection
@@ -12,10 +14,8 @@ class BTSerialCommunication : public SerialCommunication {
 public:
     /**
      * This is the constructor of the object and creates the connection.
-     * @param tx_pin the pin used to send information
-     * @param rx_pin the pin used to receive information
      */
-    BTSerialCommunication(int tx_pin, int rx_pin);
+    BTSerialCommunication();
 
     void updateBuffer();
 
@@ -30,7 +30,7 @@ private:
     /**
      * This is the object that allows to send and receive characters.
      */
-    SoftwareSerial *bt;
+    SoftwareSerial bt = SoftwareSerial(BT_RX_PIN, BT_TX_PIN);
 };
 
 #endif
