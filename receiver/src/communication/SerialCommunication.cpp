@@ -17,7 +17,7 @@ bool SerialCommunication::isTheLineAllRead() {
 }
 
 void SerialCommunication::putInTheBuffer(char c) {
-    if(isThisCharGood(c));
+    if(isThisCharGood(c))
     	this->stringHandler.addChar(c);
 }
 
