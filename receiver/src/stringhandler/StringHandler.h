@@ -35,7 +35,7 @@ private:
     /**
      * This is the maximum characters number allowed for a string.
      */
-    static const int STRING_LENGTH = 100;
+    static const int STRING_LENGTH = 50;
 
     /**
      * This is the character that defines the string end.

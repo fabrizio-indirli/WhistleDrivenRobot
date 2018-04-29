@@ -7,8 +7,8 @@ SerialCommunication* communication;
 Executer* executer;
 
 void setup() {
-    communication = new BTSerialCommunication();
-    //communication = new USBSerialCommunication();
+    //communication = new BTSerialCommunication();
+    communication = new USBSerialCommunication();
     executer = new Executer();
     Serial.begin(9600);
 }

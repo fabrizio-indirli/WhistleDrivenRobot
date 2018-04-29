@@ -17,7 +17,7 @@ bool SerialCommunication::isTheLineAllRead() {
 }
 
 void SerialCommunication::putInTheBuffer(char c) {
-    if(isThisCharGood(c))
+    if(isThisCharGood(c));
     	this->stringHandler.addChar(c);
 }
 
@@ -27,9 +27,9 @@ String* SerialCommunication::getReadLine() {
 
 bool SerialCommunication::isThisCharGood(char c){
 	return 	c == END_C
-			||	isInTheInterval(c, CAPITAL_A, CAPITAL_Z)
-			||	isInTheInterval(c, LOWER_A, LOWER_Z)
-			||	isInTheInterval(c, NUMBER_0, NUMBER_9);
+			//||	isInTheInterval(c, CAPITAL_A, CAPITAL_Z)
+			||	isInTheInterval(c, LOWER_A, LOWER_Z);
+			//||	isInTheInterval(c, NUMBER_0, NUMBER_9);
 }
 
 bool SerialCommunication::isInTheInterval(char c, char beginC, char endC){

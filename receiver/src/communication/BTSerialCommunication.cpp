@@ -16,5 +16,5 @@ void BTSerialCommunication::updateBuffer() {
 }
 
 void BTSerialCommunication::print(String* string) {
-    //this->bt->print(string->c_str());
+    this->bt.print(string->c_str());
 }

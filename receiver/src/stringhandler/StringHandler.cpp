@@ -8,13 +8,13 @@ StringHandler::StringHandler() {
 
 void StringHandler::addChar(char ch) {
     //Control if the buffer is already full
-    if(this->bufferIndex >= this->STRING_LENGTH) {
+    if(this->bufferIndex >= this->STRING_LENGTH || this->isOver) {
         this->isOver = true;
         return;
     }
 
     //Control if the buffer isn't full and if an end character is received
-	if(!this->isOver && ch != this-> END_CHAR){
+	if(ch != this->END_CHAR){
     	this->buffer[this->bufferIndex] = ch;
     	(this->bufferIndex)++;	
     }
