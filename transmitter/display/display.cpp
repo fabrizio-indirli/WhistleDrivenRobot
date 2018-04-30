@@ -1,5 +1,4 @@
 #include "display.h"
-#include "../freq_recognition.h"
 
 Display::Display(){
 	display = new Lcd44780(	rs::getPin(),
@@ -26,7 +25,6 @@ void Display::setFrequency(float32_t frequency){
 	
 	this->frequency = frequency;
 	this->isFrequencyTooLow = false;
-	printf("Aggiorno fortissimo f");
 	updateFrequency();
 }
 
@@ -35,7 +33,6 @@ void Display::setCommand(Command command){
 		return;
 		
 	this->command = command;
-	printf("Aggiorno fortissimo c");
 	updateCommand();
 }
 

@@ -1,5 +1,5 @@
 #include <../miosix/util/lcd44780.h>
-#include "../freq_recognition.h"
+#include "../freq_recognition/freq_recognition.h"
 
 using namespace miosix;
 

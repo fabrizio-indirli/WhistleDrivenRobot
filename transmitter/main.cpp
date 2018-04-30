@@ -1,7 +1,7 @@
 #include <cstdio>
 #include "miosix.h"
 #include <string>
-#include "freq_recognition.h"
+#include "freq_recognition/freq_recognition.h"
 #include <util/lcd44780.h>
 #include <stdio.h>
 #include <display/display.h>
@@ -52,7 +52,7 @@ static float32_t freq=0;
 Display display;
 
 /**
- * This function is invoked everytime a new audo sample has been acquired and processed.
+ * This function is invoked everytime a new audio sample has been acquired and processed.
  * when this function is called, the variables "freq" and "fundamentalFreqAmplitude" already contains
  * the frequency and the amplitude of the last acquired sample, respectively.
  */

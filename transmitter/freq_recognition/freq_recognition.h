@@ -3,14 +3,14 @@
 * calculate the strongest frequency (and its amplitude) of each sample **/
 
 
-#include "miosix.h"
+#include "../miosix/miosix.h"
 #include "Microphone.h"
 #include <tr1/functional>
 #include <cstdio>
 #include <stdbool.h>
 #include <math.h>
 #define ARM_MATH_CM4
-#include "miosix/arch/common/CMSIS/Include/arm_math.h"
+#include "../miosix/arch/common/CMSIS/Include/arm_math.h"
 
 #define SAMPLES 8192 //audio samples acquired each time
 #define FFT_SIZE SAMPLES/2 //we store only the real parts of the samples
