@@ -1,5 +1,7 @@
 #include <../miosix/util/lcd44780.h>
 #include "../freq_recognition/freq_recognition.h"
+#ifndef DISPLAY_H_
+#define DISPLAY_H_
 
 using namespace miosix;
 
@@ -92,3 +94,5 @@ private:
 	 */
 	void fillDisplaySpace(int n);
 };
+
+#endif
