@@ -1,18 +1,17 @@
-\author{Fabrizio}
-The STM32D407VG-Discovery board is equipped with a MP45DT02 MEMS microphone and a CS43L22 DAC for audio acquisition and processing. In this project, these devices are used to detect the sounds' frequency, which will determine the commands given to the robot.
+The transmitter is the part that provides to convert the received sounds signals in commands for the robot, through a microphone. The STM32D407VG-Discovery board is equipped with a MP45DT02 MEMS microphone and a CS43L22 DAC for audio acquisition and processing. In this project, these devices are used to detect the sounds' frequency, which will determine the commands given to the robot.
 
 \subsection{The MP45DT02 microphone}
-The MP45DT02-M is a compact, low-power, topport, omnidirectional, digital MEMS microphone. It's soldered on the top of the STM32F407G-DISC1 board, in the bottom-right corner.
+The MP45DT02-M is a compact, low-power, omnidirectional, digital MEMS (Micro Electro-Mechanical Systems) microphone.
 \begin{figure}[H]
 	\hspace*{0.15 \textwidth}\includegraphics[width= 0.7\textwidth]
 	{files/images/board_view}
 	\caption{View of the upper surface of the board, with the microphone highlighted in the circle.}
 \end{figure}
 
-In its bottom surface, it has six pins:
+In the microphone bottom surface, there are six pins:
 \begin{enumerate}
 	\item \textbf{GND}: Connected to the GND of the board.
-	\item \textbf{LR} - Channel selection: used because the microphone is designed to allow stereo audio capture. If it is connected to GND, the MP45DT02 is placed in \textit{left} channel mode: a sample is latched to the data output pin (PDM, Pulse-Density Modulation) on a falling edge of the clock, while on the rising clock edge, the output is set to high impedance. If the LR pin is connected to Vdd then the device operates in \textit{right} channel mode and the MP45DT02 latches it's sample to PDM on a clock rising edge, setting the pin to high impedance on the falling edge of the clock.
+	\item \textbf{LR} - Channel selection: used since the microphone is designed to allow stereo audio capture. If it is connected to GND, the MP45DT02 is placed in \textit{left} channel mode: a sample is latched to the data output pin (PDM, Pulse-Density Modulation) on a falling edge of the clock, while on the rising clock edge, the output is set to high impedance. If the LR pin is connected to Vdd then the device operates in \textit{right} channel mode and the MP45DT02 latches it's sample to PDM on a clock rising edge, setting the pin to high impedance on the falling edge of the clock.
 	\item \textbf{GND}: Connected to the GND of the board.
 	\item \textbf{CLK} - Synchronization input clock: this pin is connected to the PB10 port of the board. The clock signal determines the sampling frequency.
 	\item \textbf{DOUT} - PDM Data Output. Connected to the PC03 pin of the board's GPIO.
@@ -29,7 +28,7 @@ In its bottom surface, it has six pins:
 The sound is acquired by the microphone, and the communication is performed through I2C.\\
 The microphone acquires data in PDM format: each sample is a single bit, so the acquisition is a stream of bits; an high amplitude is represented with an high density of \textit{1} bits in the bitstream. \\
 The sampling frequency of the ADC is 44000 Hz. \\
-In order to process the data, it has to be converted in PCM (Pulse-Code Modulation) format: this is done by doing \textbf{CIC filtering} (Cascaded Integrator-Comb), with a decimation factor of 16 (each 16-bits sequence of 1-bit PDM samples is converted in one 16-bit PCM sample).\\
+In order to process the data, it has to be converted in PCM (Pulse-Code Modulation) format: this is done by doing \textit{CIC filtering} (Cascaded Integrator-Comb), with a decimation factor of 16 (each 16-bits sequence of 1-bit PDM samples is converted in one 16-bit PCM sample).\\
 Then, an FFT (Fast Fourier Transform) analysis is performed on 4096 samples at a time to extract the fundamental frequency and the amplitude of the sound.
 
 \subsubsection{Microphone initialization}
@@ -46,13 +45,13 @@ The initialization of the sound acquisition system comprehends several steps:
 Each time a new block of samples is read, the \textit{freq\_recognition} library:
 \begin{enumerate}
 	\item Reads blocks of sixteen bits from SPI and transfers them in RAM through DMA;
-	\item Converts 16 PDM samples in one 16-bit PCM sample via \textbf{CIC filtering} with a decimation factor of sixteen;
+	\item Converts 16 PDM samples in one 16-bit PCM sample via \textit{CIC filtering} with a decimation factor of sixteen;
 	\item Perform FFT through the \textit{arm\_cfft\_radix4\_f32} module;
 	\item Calculate amplitude of each frequency with the \textit{arm\_cmplx\_mag\_f32} module;
 	\item Calculate the the fundamental frequency (and its amplitude) in the vector;
-	\item Store the values of the fundamental frequency and its amplitude in dedicated variables, then call the \textbf{callback function} to react to the detected frequency.
+	\item Store the values of the fundamental frequency and its amplitude in dedicated variables, then call the \textit{callback function} to react to the detected frequency.
 \end{enumerate}
-In this project, the \textbf{callback function} is in charge of producing commands to the engines when the frequency of the last acquired sample is in some specified ranges. These command are then sent via Bluetooth to an Arduino board that drives the engines.
+In this project, the \textit{callback function} is in charge of producing commands to the engines when the frequency of the last acquired sample is in some specified ranges. These commands are sent to an appropiate object, named \textit{ReceiverState}, which provides to sent the commands to the Arduino board. This object avoid the transmission of overwhelming sequences of the same string, sending only the first of an all equal string list.
 
 
 \subsection{The \textit{freq\_recognition} library}
@@ -104,13 +103,12 @@ The usage of the library is performed according to these steps:
 	\item Start the acquisition by calling the \textit{startAcquisition(\&callback, \&freq, \&amplitude)} method, passing to it the addresses of the callback function and of the 2 variables. This method is non-blocking (operations are performed in other threads).
 \end{enumerate}
 Each time a new block of 16-bit PDM samples has been acquired, the driver will perform an FFT analysis on it and will write the frequency and the amplitude of the sample in the chosen variables, then the callback function will be called automatically. This process will be iterated continuously until the \textit{stopAcquisition()} function is called.
+\newpage
 
 \subsection{Displaying the recognized frequency}
-The transmitter is equipped with a standard \textbf{HD44780 LCD} with two rows and sixteen columns, that is used to print the currently recognized frequency and the associated command (if any).
+The transmitter is equipped with a standard HD44780 LCD with two rows and sixteen columns, that is used to print the currently recognized frequency and the associated command (if any).
 
 \subsubsection{Connections}
-The display has sixteen pins that are connected in this way:
-
 \begin{tabular}{|c|c|}
 	\hline 
 	\textbf{LCD pin} & \textbf{Connected to} \\ 
@@ -149,29 +147,13 @@ The display has sixteen pins that are connected in this way:
 	\hline 
 \end{tabular} 
 
-\begin{figure}[H]
-	\centering
-	\hspace*{0.1 \textwidth}\includegraphics[width= 0.8\textwidth]
-	{files/images/display_connections.jpg}
-	\caption{Schema of the display's connections.}
-\end{figure}
-
 \subsubsection{Driver and usage}
 The driver of the display for Miosix is available in the OS itself: to use it, the \textit{utils/lcd44780.h} library has been included in the main program. \\
-In the software, the display is represented with an instance of the Lcd44780 class, whose constructor needs to know the pins of the board on which the RS, E, D4, D5, D6, D7 display pins are connected. \\
-Then, we can use the methods of the Lcd44780 object to print on the screen:
+	In the software, the display is represented as an instance of the \textit{Lcd44780} class, whose constructor needs to know the pins of the board on which the RS, E, D4, D5, D6, D7 display pins are connected. Through this object, these methods are available:
  \begin{itemize}
  	\item \textit{clear()} to wipe the content of the screen;
  	\item \textit{go(column, row)} moves the cursor to the specified position;
  	\item \textit{printf()} prints to the display, using the standard C formatting rules.
  \end{itemize}
 
-In this project, the \textit{main} function instantiates a Lcd44780 object called \textit{display}, and calls its methods \textit{clear()} and \textit{go(0,0)} to initialize it.
-Then, each time the callback function is called from the frequency recognition library, it uses the \textit{printf()} method to print the recognized frequency and the associated command; if the volume of the acquired sample is too low, \textit{Volume too low} will be printed on the screen instead of the frequency.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]
-	{files/images/display_on.jpg}
-	\caption{Display showing the frequency and the associated command.}
-\end{figure}
+To reduce the risk of printing errors and the required number of updates, the \textit{Lcd44780} instance is encapsulated in an class, named \textit{Display}, in the homonym package. This class exposes only two methods: the first is to set the frequency and the others to set the commands. When one of these are invoked, it will update the display if and only if the passed value is not yet shown.
