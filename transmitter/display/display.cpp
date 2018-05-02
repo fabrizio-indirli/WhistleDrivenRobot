@@ -9,9 +9,10 @@ Display::Display(){
 							d7::getPin(),
 							HEIGHT,
 							LENGTH);
-  	command = UNDEFINED;
-  	isFrequencyTooLow = true;
   	frequency = 0;
+  	setFrequencyTooLow();
+  	command = STOP;
+  	updateCommand();
 }
 
 void Display::setFrequencyTooLow(){

@@ -66,7 +66,8 @@ void callback(){
 
     if(!(fundamentalFreqAmplitude>AMPLITUDE_THRESHOLD)){
     	display.setFrequencyTooLow();
-    	display.setCommand(NONE);
+    	display.setCommand(STOP);
+    	state.setState(STOP);
     	return;	
     }
 
@@ -110,6 +111,7 @@ int main(int argc, char *argv[]){
 	//greenLed setup
 	greenLed::mode(Mode::OUTPUT);
 	greenLed::low();
+	state.setState(STOP);
 
     //start audio frequency recognition
     startAcquisition(&callback, &freq, &fundamentalFreqAmplitude);
