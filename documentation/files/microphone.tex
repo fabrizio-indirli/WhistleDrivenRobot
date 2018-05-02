@@ -1,4 +1,4 @@
-The transmitter is the part that provides to convert the received sounds signals in commands for the robot, through a microphone. The STM32D407VG-Discovery board is equipped with a MP45DT02 MEMS microphone and a CS43L22 DAC for audio acquisition and processing. In this project, these devices are used to detect the sounds' frequency, which will determine the commands given to the robot.
+The transmitter is the part that provides to convert the received sounds signals in commands for the robot, through a microphone. The STM32D407VG-Discovery board is equipped with a MP45DT02 MEMS microphone and a CS43L22 DAC for audio acquisition and processing. In this project, these devices are used to detect the sounds' frequency, which will determine the commands to give to the robot.
 
 \subsection{The MP45DT02 microphone}
 The MP45DT02-M is a compact, low-power, omnidirectional, digital MEMS (Micro Electro-Mechanical Systems) microphone.
@@ -28,7 +28,7 @@ In the microphone bottom surface, there are six pins:
 The sound is acquired by the microphone, and the communication is performed through I2C.\\
 The microphone acquires data in PDM format: each sample is a single bit, so the acquisition is a stream of bits; an high amplitude is represented with an high density of \textit{1} bits in the bitstream. \\
 The sampling frequency of the ADC is 44000 Hz. \\
-In order to process the data, it has to be converted in PCM (Pulse-Code Modulation) format: this is done by doing \textit{CIC filtering} (Cascaded Integrator-Comb), with a decimation factor of 16 (each 16-bits sequence of 1-bit PDM samples is converted in one 16-bit PCM sample).\\
+In order to process the data, it has to be converted in PCM (Pulse-Code Modulation) format: this is done by doing \textit{CIC filtering} (Cascaded Integrator-Comb), with a decimation factor of sixteen (each 16-bits sequence of 1-bit PDM samples is converted in one 16-bit PCM sample).\\
 Then, an FFT (Fast Fourier Transform) analysis is performed on 4096 samples at a time to extract the fundamental frequency and the amplitude of the sound.
 
 \subsubsection{Microphone initialization}
@@ -37,7 +37,7 @@ The initialization of the sound acquisition system comprehends several steps:
 	\item SPI, DMA and General Purpose ports B and C are enabled through RCC
 	\item GPIO ports are configured in \textit{Alternate} mode
 	\item SPI is set to work in I2S mode
-	\item interrupt handling for DMA is configured
+	\item Interrupt handling for DMA is configured
 	
 \end{enumerate}
 
@@ -49,16 +49,16 @@ Each time a new block of samples is read, the \textit{freq\_recognition} library
 	\item Perform FFT through the \textit{arm\_cfft\_radix4\_f32} module;
 	\item Calculate amplitude of each frequency with the \textit{arm\_cmplx\_mag\_f32} module;
 	\item Calculate the the fundamental frequency (and its amplitude) in the vector;
-	\item Store the values of the fundamental frequency and its amplitude in dedicated variables, then call the \textit{callback function} to react to the detected frequency.
+	\item Store the values of the fundamental frequency and its amplitude in dedicated variables, then ivoke the \textit{callback function} to react to the detected frequency.
 \end{enumerate}
-In this project, the \textit{callback function} is in charge of producing commands to the engines when the frequency of the last acquired sample is in some specified ranges. These commands are sent to an appropiate object, named \textit{ReceiverState}, which provides to sent the commands to the Arduino board. This object avoid the transmission of overwhelming sequences of the same string, sending only the first of an all equal string list.
+In this project, the \textit{callback function} is in charge of producing commands to the engines when the frequency of the last acquired sample is in some specified ranges. These commands are sent to an appropiate object, named \textit{ReceiverState}, which provides to sent the commands to the Arduino board. This object avoid the transmission of overwhelming sequences of the same string, sending only the first of an all equal string series.
 
 
 \subsection{The \textit{freq\_recognition} library}
 This library defines a simple interface for recording audio with the embedded microphone on the STM32F4 Discovery board and for performing an FFT analysis to calculate the strongest frequency (and its amplitude) of each sample.
 
 \subsubsection{The Microphone.cpp driver}
-Sound acquisition from the embedded microphone is performed by the \textbf{\textit{Microphone.cpp}} driver. \\
+Sound acquisition from the embedded microphone is performed by the \textit{Microphone.cpp} driver. \\
 This driver was originally developed by Riccardo Binetti, Guido Gerosa and Alessandro Mariani, but it has been improved by Lorenzo Binosi and Matheus Fim in their \textit{Digital Guitar Tuner} project. \\
 For this project, some little changes were made to the driver, such as reducing the decimation factor to improve sampling frequency.
 
@@ -67,9 +67,9 @@ The \textit{freq\_recognition} library provides the following functions:
 \begin{itemize}
 	\item \textbf{\textit{void startAcquisition(function\textless void ()\textgreater cback, float32\_t* freqVar, float32\_t* amplitudeVar)}}, whose parameters are:
 	\begin{itemize}
-		\item \textbf{\textit{cback}}: a pointer to the callback function that will be executed automatically each time a new sample has been acquired and processed;
-		\item \textbf{\textit{freqVar}}: pointer to the float32\_t where the detected frequency of each sample will be stored;
-		\item \textbf{\textit{amplitudeVar}}: pointer to the float32\_t where the detected amplitude of each sample will be stored.
+		\item \textit{cback}: a pointer to the callback function that will be executed automatically each time a new sample has been acquired and processed;
+		\item \textit{freqVar}: pointer to the float32\_t where the detected frequency of each sample will be stored;
+		\item \textit{amplitudeVar}: pointer to the float32\_t where the detected amplitude of each sample will be stored.
 	\end{itemize}
 \item \textbf{\textit{void stopAcquisition()}}: stops the acquisition of new samples.
 \end{itemize}
@@ -86,7 +86,7 @@ When the \textit{startAcquisition()} method is called, the library retrieves the
 \end{enumerate}
 \begin{figure}[H]
 	\centering
-	\hspace*{-0.2 \textwidth}\includegraphics[width= 1.4\textwidth]
+	\hspace*{-0.15 \textwidth}\includegraphics[width= 1.3\textwidth]
 	{files/images/freqAcquisitionUML.png}
 	\caption{UML schema of the interaction between the modules in frequency recognition.}
 \end{figure}
@@ -95,7 +95,7 @@ When the \textit{startAcquisition()} method is called, the library retrieves the
 \subsubsection{Usage of the library}
 The usage of the library is performed according to these steps:
 \begin{enumerate}
-	\item Add the \textbf{\textit{freq\_recognition.cpp}} and \textbf{\textit{freq\_recognition.h}} files in the folder of the other source files of the project, and add the \textit{freq\_recognition.cpp} entry in the \textbf{SRC} line of the makefile;
+	\item Add the \textit{freq\_recognition.cpp} and \textit{freq\_recognition.h} files in the folder of the other source files of the project, and add the \textit{freq\_recognition.cpp} entry in the \textit{SRC} line of the makefile;
 	\item Add the \textit{arm\_bitereversal.c}, \textit{arm\_cfft\_radix4\_f32.c}, \textit{arm\_cfft\_radix4\_init\_f32.c} and \textit{arm\_cmplx\_mag\_f32.c} libraries to the project (these libraries are required by \textit{freq\_recognition.cpp});
 	\item Add the \textit{\#include "freq\_recognition.h"} line at the start of the source file that will use the library;
 	\item Declare 2 float32\_t variables to store the frequency and the amplitude of the last acquired sample;
