@@ -1,5 +1,5 @@
-To bring the signals from the transmitter to the receiver, a wireless connection is needed, in this case
-implemented trough two HC-05 modules. These boards are, in technical terms, Bluetooth SPP (Serial Port Protocol) modules, used to abstract the wireless connection implementation.\\
+To convey the commands from the transmitter to the receiver, a wireless connection is needed, in this case
+implemented through two HC-05 modules. These boards are, in technical terms, Bluetooth SPP (Serial Port Protocol) modules, used to abstract the wireless connection implementation.\\
 
 \begin{figure}[H]
 	\hspace*{0.3 \textwidth}\includegraphics[width= 0.4\textwidth]
@@ -27,7 +27,7 @@ The default device mode is the \textit{Data Mode} and it is used to broadcast da
 
 \subsection{\textit{AT Mode}}
 AT command mode allows to interrogate and to modify the previous settings described. Changing the module state, it is possible to configure it to automatically connect to another Bluetooth device, as it will be made in this project.\\
-To use the Command mode, an USB to TTL adapter or an opportunely configurated Arduino board is needed. The HC05 should be connected to one of these devices according to the following scheme:\\
+To use the Command mode, an USB to TTL adapter or an opportunely configured Arduino board is needed. The HC05 should be connected to one of these devices according to the following scheme:\\
 
 \begin{tabular}{|c|c|c|}
 	\hline 
@@ -51,8 +51,9 @@ To use the Command mode, an USB to TTL adapter or an opportunely configurated Ar
 \end{figure}
 To activate \textit{AT Mode} on these HC-05 modules, the pin 34 has to be on power up. For this purpose there are two different approaches: \begin{itemize}
 \item if there is a button on the module, press it: this will automatically connect the pin 34 to the high power source
-\end{itemize}if not, manually connect pin 34 to a 5V voltage source through a jumper wire.\\
-To enter on this mode, it is necessary that the power is applied to the module when the pin 34 has an high tension. Once the module has booted, the voltage on pin 34 can become high impedance.\\
+\item if not, manually connect pin 34 to a 5V voltage source through a jumper wire.
+\end{itemize}
+To enter this mode, the pin 34 must be connected to at least 4V when powering on the module. Once the module has booted, the voltage on pin 34 can become high impedance.\\
 To verify if the module is in \textit{AT Mode}, the LED on the HC05 should blink with halved frequency.
 
 \subsection{Setup the communication}

@@ -1,4 +1,4 @@
-The transmitter is the part that provides to convert the received sounds signals in commands for the robot, through a microphone. The STM32D407VG-Discovery board is equipped with a MP45DT02 MEMS microphone and a CS43L22 DAC for audio acquisition and processing. In this project, these devices are used to detect the sounds' frequency, which will determine the commands to give to the robot.
+The transmitter is the part that recognizes sounds (through a microphone) and produces commands for the robot. The STM32D407VG-Discovery board is equipped with a MP45DT02 MEMS microphone and a CS43L22 DAC for audio acquisition and processing. In this project, these devices are used to detect the sounds' frequency, which will determine the commands to give to the robot.
 
 \subsection{The MP45DT02 microphone}
 The MP45DT02-M is a compact, low-power, omnidirectional, digital MEMS (Micro Electro-Mechanical Systems) microphone.
@@ -51,7 +51,7 @@ Each time a new block of samples is read, the \textit{freq\_recognition} library
 	\item Calculate the the fundamental frequency (and its amplitude) in the vector;
 	\item Store the values of the fundamental frequency and its amplitude in dedicated variables, then ivoke the \textit{callback function} to react to the detected frequency.
 \end{enumerate}
-In this project, the \textit{callback function} is in charge of producing commands to the engines when the frequency of the last acquired sample is in some specified ranges. These commands are sent to an appropiate object, named \textit{ReceiverState}, which provides to sent the commands to the Arduino board. This object avoid the transmission of overwhelming sequences of the same string, sending only the first of an all equal string series.
+In this project, the \textit{callback function} is in charge of producing commands to the engines when the frequency of the last acquired sample is in some specified ranges. These commands are sent to an appropiate object, named \textit{ReceiverState}, which sends the commands to the Arduino board. This object avoids to repeatedly send the same command, sending only the first of an all equal string series.
 
 
 \subsection{The \textit{freq\_recognition} library}
