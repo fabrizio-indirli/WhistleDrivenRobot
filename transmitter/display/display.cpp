@@ -11,7 +11,7 @@ Display::Display(){
 							LENGTH);
   	command = UNDEFINED;
   	isFrequencyTooLow = true;
-  	frequency = 1234;
+  	frequency = 0;
 }
 
 void Display::setFrequencyTooLow(){

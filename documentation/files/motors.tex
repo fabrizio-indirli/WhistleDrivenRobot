@@ -30,6 +30,7 @@ All the received characters are temporary stored in an apposite data structure, 
 \subsubsection{\textit{SerialCommunication} extensions}
 In the Figure \ref{fig:connection}, in particular in the parent class, two methods are indicate as virtual, since their implementation depends by the connection type used. Consequently, the \textit{SerialCommunication} class was extended by \textit{BTSerialCommunication} and by \textit{USBSerialCommunication}, which implement these two methods, according to their specification and using proper attributes to perform these actions.\\
 In the communication, the class \textit{USBSerialCommunication} and the \textit{print} method of \textit{BTSerialCommunication} are implemented but never used. They were added for debug features and for future expansion, made easier by this organization.
+\newpage
 
 \subsection{The Executer}
 The \textit{Executer} interprets the received commands by the connection. A command is a string that has, as first character, a proper name and, subsequently, some parameters for that specific command. Its name is used to get, with a constant time through an Hash map, the method to invoke for executing that specific command. This class exposes only a method, the one invoked passing the string as parameter and that researches and executes the opportune function.\\*
@@ -40,12 +41,20 @@ The quoted Hash map is not a class from the library but a proper class implement
 
 \subsubsection{The used commands}
 This robot uses the following commands:
-???
+\begin{itemize}
+	\item \textit{f}: to go forward;
+	\item \textit{b}: to go back;
+	\item \textit{l}: to go to the left;
+	\item \textit{r}: to go to the right;
+	\item \textit{s}: to stop.
+\end{itemize}
+The command analyzer is easily extensible and further commands can be implemented, also with parameters.
+\newpage
 
 \subsection{The circuit}
 \begin{figure}[h!]
 	\centering
-	\hspace*{-0.05 \textwidth}\includegraphics[width= 1.1\textwidth]
+	\hspace*{-0.15 \textwidth}\includegraphics[width= 1.3\textwidth]
 	{files/images/ReceiverScheme}
 	\caption{The motors circuit scheme of the robot.}
 \end{figure}

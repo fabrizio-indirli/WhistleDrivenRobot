@@ -5,6 +5,7 @@
 #include <util/lcd44780.h>
 #include <stdio.h>
 #include <display/display.h>
+#include <ReceiverState.cpp>
 
 #define SAMPLES 8192 //audio samples acquired each time
 #define FFT_SIZE SAMPLES/2 //we store only the real parts of the samples
@@ -52,7 +53,12 @@ static float32_t freq=0;
 Display display;
 
 /**
- * This function is invoked everytime a new audio sample has been acquired and processed.
+ * This is the object that receives all the commands for the robots
+ */
+ReceiverState state;
+
+/**
+ * This function is invoked everytime a new audo sample has been acquired and processed.
  * when this function is called, the variables "freq" and "fundamentalFreqAmplitude" already contains
  * the frequency and the amplitude of the last acquired sample, respectively.
  */
@@ -67,41 +73,31 @@ void callback(){
     if(freq < FORWARD_MAX_FREQ && freq > FORWARD_MIN_FREQ) {
             //if the frequency of the detected sound is between the FORWARD_MIN_FREQ and FORWARD_MAX_FREQ values, move forward
             greenLed::high();
-
-           	printf("f\n");//sends the 'move forward' command over bluetooth to the receiver
-
 			display.setCommand(FORWARD);
+           	state.setState(FORWARD);//sends the 'move forward' command over bluetooth to the receiver
     }
     else if(freq>TURNLEFT_MIN_FREQ && freq < TURNLEFT_MAX_FREQ) {
             //if the frequency of the detected sound is between the TURNLEFT frequency values, turn left
             greenLed::high();
-
-            printf("l\n");//sends the 'turn left' command over bluetooth to the receiver
-
 			display.setCommand(LEFT);
+            state.setState(LEFT);//sends the 'turn left' command over bluetooth to the receiver
     }
     else if(freq>TURNRIGHT_MIN_FREQ && freq < TURNRIGHT_MAX_FREQ) {
             //if the frequency of the detected sound is between the TURNRIGHT frequency values, turn right
             greenLed::high();
-
-            printf("r\n");//sends the 'turn right' command over bluetooth to the receiver
-
-            display.setCommand(RIGHT);
+			display.setCommand(RIGHT);
+            state.setState(RIGHT);//sends the 'turn right' command over bluetooth to the receiver
     }
     else if(freq>BACKWARD_MIN_FREQ && freq<BACKWARD_MAX_FREQ) {
             //if the frequency of the detected sound is between the BACKWARD_MIN_FREQ and BACKWARD_MAX_FREQ values, move backwards
             greenLed::high();
-
-            printf("b\n");//sends the 'move backwards' command over bluetooth to the receiver
-
             display.setCommand(BACK);
+            state.setState(BACK);//sends the 'move backwards' command over bluetooth to the receiver
     }
     else {//if the sound is not strong enough, or if the frequency is not in the accepted ranges, stop all the engines
             greenLed::low();
-			
-			printf("s\n");
-			
-            display.setCommand(NONE);
+			display.setCommand(STOP);
+			state.setState(STOP);
     }
 
     //print on USB serial (for debugging)

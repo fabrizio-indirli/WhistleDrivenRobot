@@ -1,39 +1,37 @@
-\author{Yuri}
-For this project, we have decided to allow communication between STM32F407 and Arduino board trough two HC-05 modules.\\
-HC-05 module is an easy to use Bluetooth SPP (Serial Port Protocol) module, designed for transparent wireless serial connection setup. The HC-05 Bluetooth Module can be used in a Master or Slave configuration, making it a great solution for wireless communication.\\
+To bring the signals from the transmitter to the receiver, it is necessary using a wireless connection, in this case
+implemented trough two HC-05 modules. These boards are, in tecnical terms, Bluetooth SPP (Serial Port Protocol) modules, used to abstract the wireless connection implementation.\\
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]
+	\hspace*{0.3 \textwidth}\includegraphics[width= 0.4\textwidth]
 	{files/images/hc05_view}
-	\caption{View of the surfaces of the HC-05 module.}
+	\caption{View of the HC-05 surfaces.}
 \end{figure}
 
 \subsection{Command and Data Transfer modes}
-The module has two modes of operation: \textbf{Command Mode} where we can send AT commands to it, and \textbf{Data Mode} where it transmits and receives data to another Bluetooth module.\\
-
-\textbf{Default Settings}\\
-The default settings for new modules are:
+This module has two modes of operation:
 \begin{itemize}
-\item Name = HC-05
-\item Password = 1234
-\item Baud rate in communication mode = 9600*
-\item Baud rate in AT/Command mode = 38400
+	\item \textit{Command Mode} (or \textit{AT Mode}): used for configuring the module (through AT commands);
+	\item \textit{Data Mode}: user for transmitting and receives data to another Bluetooth module.
 \end{itemize}
 
-*sometimes 38400\\
+\subsection{Default settings}
+The default settings for new modules are:
+\begin{itemize}
+	\item Device name: HC-05;
+	\item Password: 1234;
+	\item Baud rate in communication mode: 9600 character per second (but sometimes 38400 character per second);
+	\item Baud rate in \textit{AT Mode}: 38400 character per second;
+	\item State: there are two possible state for this module, master and slave, the second is the default behaviour.
+\end{itemize}
+The default device mode is the \textit{Data Mode} and it is used to broadcast data through Bluetooth.\\
 
-The default mode is DATA Mode, and it is used to transmit data over Bluetooth communication.\\
-AT command mode allows you to interrogate the Bluetooth module and to change some of the settings: like the name, the baud rate, whether or not it operates in slave mode or master mode.\\
-When used as a master device AT commands allow you to connect to other Bluetooth slave devices.\\
-For the project, we need to change some of the configuration setup values in AT command mode. \\
-
-There are two ways to operate in Command Mode: using a USB to TTL adapter, or using an Arduino board.\\
-Link the HC-05 following this scheme (don’t plug +5V pin for now)\\
+\subsection{\textit{AT Mode}}
+AT command mode allows to interrogate and to modify the previous settings described. Changing the module state, it is possible configuring it to automatically connect to another Bluetooth device, as it will be made in this project.\\
+To use the Command mode it is necessary use an USB to TTL adapter or an opportunely configurated Arduino board. The HC05 should be connected to one of these device according to the following scheme:\\
 
 \begin{tabular}{|c|c|c|}
 	\hline 
-	\textbf{HC-05 pin} & \textbf{Connected to \textit{USB to TTL}} & \textbf{Or connected to \textit{Arduino}} \\ 
+	\textbf{HC-05 pin} & \textbf{For \textit{USB to TTL}} & \textbf{For \textit{Arduino}} \\ 
 	\hline 
 	(1) +5V & Vcc & Vcc \\ 
 	\hline 
@@ -43,103 +41,60 @@ Link the HC-05 following this scheme (don’t plug +5V pin for now)\\
 	\hline 
 	(4) Rx & Tx & Tx \\ 
 	\hline 
-\end{tabular} 
+\end{tabular}
 
-\subsubsection{How to enter command mode if your HC-05 has KEY pin}
-\begin{tabular}{|c|c|c|}
-	\hline 
-	\textbf{HC-05 pin} & \textbf{Connected to \textit{USB to TTL}} & \textbf{Or connected to \textit{Arduino}} \\ 
-	\hline 
-	Key & Vcc & 3.3V \\ 
-	\hline 
-\end{tabular} \\
-
-KEY: This pin has to be pulled high to enter AT mode.
-
-\subsubsection{How to enter command mode if your HC-05 has EN pin instead of KEY pin}
+\subsubsection{Enter in \textit{AT Mode} though EN pin}
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]
+	\hspace*{0.3 \textwidth}\includegraphics[width= 0.4\textwidth]
 	{files/images/hc05_en_pin}
 	\caption{HC-05 module with EN pin and button switch.}
 \end{figure}
-To activate AT mode on these HC-05 modules, pin 34 needs to be HIGH on power up. The small push button switch connects pin 34 to +3.3v so we can either:
-\begin{itemize}
-	\item connect pin 34 directly to +3v3v and power on, or
-	\item hold the button switch closed when starting the module.
-	
-\end{itemize}
-\textbf{METHOD 1} - Using the button switch to enter AT command mode:
-\begin{enumerate}
-	\item remove power from the module
-	\item hold the small button switch closed while powering on the module.
-	\item press and hold the button switch.
-	\item while still holding the button switch closed, apply power.
-	\item when you see the LED come on you can release the button switch.
-\end{enumerate}
-If the Bluetooth module led is flashing every 2 seconds (slower than usual) that means that we have successfully entered in the AT command mode.\\
-\textbf{METHOD 2} - Using pin 34 to enter full AT command mode:
-\begin{enumerate}
-	\item remove power from the module
-	\item make a connection between pin 34 and +3.3v
-	\item reapply power.
-\end{enumerate}
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]
-	{files/images/hc05_pin34}
-	\caption{Example of connection bewteen pin 34 and +3.3v.}
-\end{figure}
-If the Bluetooth module led is flashing every 2 seconds (slower than usual) that means that we have successfully entered in the AT command mode.\\
+To activate \textit{AT Mode} on these HC-05 modules, the pin 34 has to be on power up. For this purpose there is two different ways: if there is a button, if pressed, this will automatically connect the pin 34 to the high power source, else it is possible bring the power to it through a jumper connected to the high source.\\
+To enter on this mode, it is necessary that the power is applied to the module when the pin 34 has an high tension. Once the module has booted, the tension on pin 34 can become high impedance.\\
+To verify if the module is in \textit{AT Mode}, the LED on the HC05 should blink with a frequency of half Hertz.
 
 \subsection{Setup the communication}
-Final scheme:\\
-
-\begin{tabular}{c c c}
-STM32F407  $\rightarrow$ HC-05 (master)&  & HC-05 (slave) $\rightarrow$ Arduino \\
- & \raisebox{0pt}[0pt][0pt]{
-	\includegraphics{files/images/bluetooth_logo_resize} }
- & \\
-\end{tabular}
-Once the HC-05 is in Command mode, we can use \textit{“Arduino Serial Monitor”} to set the HC-05 module.\\
-After we run the Serial Monitor, we need to select \textit{“Both NL and CR”}, as well as, \textit{“38400 baud”} which is the default baud rate in command mode. Now, we are ready to send commands.\\
-
-\subsection{How to pair the two modules}
+Once the HC-05 is in \textit{AT Mode}, the module can be configured through the \textit{Arduino Serial Module}. The configuration will require that both \textit{NL} and \textit{CR} as end line are enabled and the communication will be kept at 38400 characters per second.\\
+It is necessary set two modules, one for the master role and one for the slave one, since the two modules should be connect each other automatically, without the support of the connected boards. The master will be seek a Bluetooth module with the given address, owned by the slave, and will establish the connection.
 
 \subsubsection{Slave configuration}
-\textbf{This HC-05 module will be used on the Arduino Board.}\\
-If we type just \textit{“AT”} which is a test command we should get back the message \textit{“OK”}.\\
-Then if we type \textit{“AT+UART?”} we should get back the massage that shows the default baud rate which is \textit{9600}. (\textbf{REMEMBER, we will use the same baud rate on the Arduino board)}\\
-Then if we type \textit{“AT+ROLE?”} we will get back a massage \textit{“+ROLE=0”} which means that the Bluetooth device is in slave mode. If we type \textit{“AT+ADDR?”} we will get back the address of the Bluetooth module and it should looks something like this: 18:e4:34cldd. \\
-Now we need to write down this address, as we will need it when configuring the master device.
+The slave mode will be used on the Arduino:
+\begin{enumerate}
+	\item Boot the HC05 in \textit{AT Mode} and connect it to the Arduino;
+	\item To verify if the connection is right, it is possible to type \textit{AT}, which sould get as answer the word \textit{OK};
+	\item Typing \textit{AT+UART?}, the module will answer with the actual baud rate, which should be 9600 characters per second, compatible with the Arduino serial port;
+	\item Typing \textit{AT+ROLE?}, the module should answer a message like \textit{+ROLE=0}, which means that the Bluetooth device is in slave mode;
+	\item Typing \textit{AT+ADDR?}, the module should answer with its address, like 18:e4:34cldd, and it is necessary to use this to configure the master module.
+\end{enumerate}
+
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]
+	\hspace*{0.1 \textwidth}\includegraphics[width= 0.8\textwidth]
 	{files/images/hc05_slave2}
 	\caption{Slave configuration of the HC-05 module trough serial monitor.}
 \end{figure}
 
 \subsubsection{Master configuration}
-\textbf{This HC-05 module will be used on the STM32F407 Discovery Board.}\\
-The STM32F407 uses \textit{19200} baud rate to communicate on USART2, so we need to change the hc-05 baud rate, in addition to pair the master with his slave.\\
-To speedup the baudrate to \textit{19200 bauds}, we have to type \textit{“AT+UART=19200,0,0”}.\\
-Then by typing \textit{“AT+ROLE=1”} we will set the Bluetooth module as a master device. After this using the \textit{“AT+CMODE=0”} we will set the connect mode to “fixed address” and using the \textit{“AT+BIND=XX,XXXX,XX”} command we will set the address of the slave device that we previously wrote down.\\ \textbf{(Use commas, instead of colons!)}\\
-\textit{“AT+BIND=18,e4,34cldd”} in our case.\\
+The master module will be used on the Discovery board. The configuration process is similar to the previous module so here will be exposed only the relevant commands.\\
+\begin{enumerate}
+	\item Boot the HC05 in \textit{AT Mode} and connect it to the Arduino;
+	\item The STM32F407 uses \textit{19200} baud rate to communicate on USART2, so it is necessary changing the hc-05 baud rate, through the command \textit{AT+UART=19200,0,0};
+	\item Typing \textit{“AT+ROLE=1”}, the serial device will set the Bluetooth module as a master device;
+	\item Typing \textit{AT+CMODE=0} the serial device will set the connection mode as \textit{fixed address} and, using the \textit{AT+BIND=XX,XXXX,XX} command, putting there the slave address, the master will be set to search this module and connect there (in the address specification it is required using commas, instead of colons).
+\end{enumerate}
+
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]
+	\hspace*{0.1 \textwidth}\includegraphics[width= 0.8\textwidth]
 	{files/images/hc05_master}
 	\caption{Master configuration of the HC-05 module trough serial monitor.}
 \end{figure}
+ \newpage
  
-\subsection{STM32F407 code (Transmitter)}
-The code loaded on the STM32F407 uses the USART2 channel to communicate with the HC-05 module.\\
-So, we should link the HC-05 Rx pin to \textbf{PA2 pin (USART2 TX)} and HC-05 Tx pin to \textbf{PA3 (USART2 RX)}\\
-In our project, we only send strings from SMT32F407 to Arduino (not vice versa), so the code will only write on the PA2 pin. (It is not necessary to link HC-05 Tx to PA3 pin for our purpose)\\
-To send a string, we just need to use the “printf” function implemented in the miosix kernel.\\
-\subsection{Arduino code (Receiver)}
-\textit{“ArduinoBluetoothTest.txt”} contains a sketch with allow us to send and receive strings trough Bluetooth communication.\\
-We decided to use \textbf{PIN 12 (TX)} and \textbf{PIN 11 (RX)} to communicate with the HC-05 module.\\
-So, we should link the HC-05 Rx pin to PIN 12 and HC-05 Tx pin to PIN 11.\\
-In our project we only send strings from SMT32F407 to Arduino (not vice versa), so the code will only read from PIN 11. (It’s not necessary to link HC-05 Rx to PIN 12 pin for our purpose)\\
-To read a string from the HC-05 on Arduino is enough to use the \textit{read()} function of the SoftwareSerial class.\\
+ \subsection{The communication to the HC05 modules}
+ 
+\subsubsection{The transmitter}
+The code on the Discovery uses the USART2 channel to communicate with the connected HC-05 module.\\
+So, it is necessary link the HC-05 \textit{Rx} pin to Discovery PA2 pin (USART2 \textit{TX}) and HC-05 \textit{Tx} pin to PA3 (USART2 \textit{RX})\\
+In this project, the Discovery only send strings to Arduino, so the code will only write on the PA2 pin but the implementation regards also the contrary stream for future expansions. To send a string, it is just require to use the \textit{printf} function implemented in the Miosix kernel.\\
+
+\subsubsection{The receiver}
+The project uses the pin 12 (\textit{TX}) and the pin 11 (\textit{RX}) to communicate with the HC-05 module. To read a string from the HC-05 on Arduino is enough to use the \textit{read()} function of the SoftwareSerial class.\\
