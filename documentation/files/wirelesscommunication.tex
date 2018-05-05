@@ -80,7 +80,7 @@ The slave mode will be used on the Arduino:
 The master module will be used on the Discovery board. The configuration process is similar to the previous module so here only the relevant commands will be explained.\\
 \begin{enumerate}
 	\item Boot the HC05 in \textit{AT Mode} and connect it to the Arduino;
-	\item The STM32F407 uses \textit{19200} baud rate to communicate on USART2, so it is necessary to change the hc-05 baud rate, through the command \textit{AT+UART=19200,0,0};
+	\item The STM32F407 uses \textit{9600} baud rate to communicate on USART2, so it is necessary to change the hc-05 baud rate, through the command \textit{AT+UART=9600,0,0};
 	\item Typing \textit{“AT+ROLE=1”}, the serial device will set the Bluetooth module as a master device;
 	\item Typing \textit{AT+CMODE=0} the serial device will set the connection mode as \textit{fixed address} and, using the \textit{AT+BIND=XX,XXXX,XX} command, putting there the slave address, the master will be set to search this module and connect there (in the address specification it is required using commas, instead of colons).
 \end{enumerate}
