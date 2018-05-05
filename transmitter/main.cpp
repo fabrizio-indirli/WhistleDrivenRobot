@@ -67,43 +67,44 @@ void callback(){
     if(!(fundamentalFreqAmplitude>AMPLITUDE_THRESHOLD)){
     	display.setFrequencyTooLow();
     	display.setCommand(STOP);
-    	state.setState(STOP);
-    	return;	
+    	printf("s\n");
+    	greenLed::low();
+    	return;
     }
 
     if(freq < FORWARD_MAX_FREQ && freq > FORWARD_MIN_FREQ) {
             //if the frequency of the detected sound is between the FORWARD_MIN_FREQ and FORWARD_MAX_FREQ values, move forward
             greenLed::high();
 			display.setCommand(FORWARD);
-           	state.setState(FORWARD);//sends the 'move forward' command over bluetooth to the receiver
+           	printf("f\n");//sends the 'move forward' command over bluetooth to the receiver
     }
     else if(freq>TURNLEFT_MIN_FREQ && freq < TURNLEFT_MAX_FREQ) {
             //if the frequency of the detected sound is between the TURNLEFT frequency values, turn left
             greenLed::high();
 			display.setCommand(LEFT);
-            state.setState(LEFT);//sends the 'turn left' command over bluetooth to the receiver
+            printf("l\n");//sends the 'turn left' command over bluetooth to the receiver
     }
     else if(freq>TURNRIGHT_MIN_FREQ && freq < TURNRIGHT_MAX_FREQ) {
             //if the frequency of the detected sound is between the TURNRIGHT frequency values, turn right
             greenLed::high();
 			display.setCommand(RIGHT);
-            state.setState(RIGHT);//sends the 'turn right' command over bluetooth to the receiver
+            printf("r\n");//sends the 'turn right' command over bluetooth to the receiver
     }
     else if(freq>BACKWARD_MIN_FREQ && freq<BACKWARD_MAX_FREQ) {
             //if the frequency of the detected sound is between the BACKWARD_MIN_FREQ and BACKWARD_MAX_FREQ values, move backwards
             greenLed::high();
             display.setCommand(BACK);
-            state.setState(BACK);//sends the 'move backwards' command over bluetooth to the receiver
+            printf("b\n");//sends the 'move backwards' command over bluetooth to the receiver
     }
     else {//if the sound is not strong enough, or if the frequency is not in the accepted ranges, stop all the engines
             greenLed::low();
 			display.setCommand(STOP);
-			state.setState(STOP);
+			printf("s\n");
     }
 
     //print on USB serial (for debugging)
     //printf("\nFrequency: %.2f hz, Amplitude: %.2f", freq, fundamentalFreqAmplitude);
-    
+
     display.setFrequency(freq);
 }
 
@@ -111,7 +112,7 @@ int main(int argc, char *argv[]){
 	//greenLed setup
 	greenLed::mode(Mode::OUTPUT);
 	greenLed::low();
-	state.setState(STOP);
+	printf("s\n");
 
     //start audio frequency recognition
     startAcquisition(&callback, &freq, &fundamentalFreqAmplitude);
