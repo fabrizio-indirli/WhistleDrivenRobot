@@ -67,7 +67,7 @@ void callback(){
     if(!(fundamentalFreqAmplitude>AMPLITUDE_THRESHOLD)){
     	display.setFrequencyTooLow();
     	display.setCommand(STOP);
-    	printf("s\n");
+    	state.setState(STOP);
     	greenLed::low();
     	return;
     }
@@ -76,30 +76,30 @@ void callback(){
             //if the frequency of the detected sound is between the FORWARD_MIN_FREQ and FORWARD_MAX_FREQ values, move forward
             greenLed::high();
 			display.setCommand(FORWARD);
-           	printf("f\n");//sends the 'move forward' command over bluetooth to the receiver
+           	state.setState(FORWARD);
     }
     else if(freq>TURNLEFT_MIN_FREQ && freq < TURNLEFT_MAX_FREQ) {
             //if the frequency of the detected sound is between the TURNLEFT frequency values, turn left
             greenLed::high();
 			display.setCommand(LEFT);
-            printf("l\n");//sends the 'turn left' command over bluetooth to the receiver
+            state.setState(LEFT);
     }
     else if(freq>TURNRIGHT_MIN_FREQ && freq < TURNRIGHT_MAX_FREQ) {
             //if the frequency of the detected sound is between the TURNRIGHT frequency values, turn right
             greenLed::high();
 			display.setCommand(RIGHT);
-            printf("r\n");//sends the 'turn right' command over bluetooth to the receiver
+            state.setState(RIGHT);
     }
     else if(freq>BACKWARD_MIN_FREQ && freq<BACKWARD_MAX_FREQ) {
             //if the frequency of the detected sound is between the BACKWARD_MIN_FREQ and BACKWARD_MAX_FREQ values, move backwards
             greenLed::high();
             display.setCommand(BACK);
-            printf("b\n");//sends the 'move backwards' command over bluetooth to the receiver
+            state.setState(BACK);
     }
     else {//if the sound is not strong enough, or if the frequency is not in the accepted ranges, stop all the engines
             greenLed::low();
 			display.setCommand(STOP);
-			printf("s\n");
+			state.setState(STOP);
     }
 
     //print on USB serial (for debugging)
@@ -112,13 +112,12 @@ int main(int argc, char *argv[]){
 	//greenLed setup
 	greenLed::mode(Mode::OUTPUT);
 	greenLed::low();
-	printf("s\n");
+	state.setState(STOP);
 
     //start audio frequency recognition
     startAcquisition(&callback, &freq, &fundamentalFreqAmplitude);
 
     while(true); //this in necessary because startAcquisition() works in another thread and it is non-blocking
-    //maybe can be replaced with Thread::wait() ?
 }
 
 
