@@ -28,6 +28,8 @@ public:
 	 */
 	void execute(String* string);
 	
+	void optimizedExecute(char c);
+	
 private:
 	/**
 	 * This is the optimization structure that allows to get the function

@@ -12,3 +12,8 @@ void Executer::execute(String* string){
 	if(this->commandsMap.containsKey(commandName))
 		(*(void (*)(String))(this->commandsMap.get(commandName)))(*string);
 }
+
+void Executer::optimizedExecute(char c){
+	if(this->commandsMap.containsKey(c))
+		(*(void (*)(String))(this->commandsMap.get(c)))("");
+}
