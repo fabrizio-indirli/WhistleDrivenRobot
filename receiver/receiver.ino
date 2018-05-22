@@ -25,7 +25,7 @@ void loop() {
     
     if(opt_c.doYouHaveCharacters()){
     	char c = opt_c.read();
-    	if(isALowerCaseLitteralChar(c))
+    	if(isALowerCaseLiteralChar(c))
     		executer->optimizedExecute(c);
     }
 }

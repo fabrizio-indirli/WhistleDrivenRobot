@@ -27,7 +27,13 @@ public:
 	 * @param string the command received
 	 */
 	void execute(String* string);
-	
+
+	/**
+	 * This method is used to optimize the function lookup and its execution.
+	 * It takes as parameter the name of the function and it will invoke it
+	 * without passing the received string as parameter.
+	 * @param c
+	 */
 	void optimizedExecute(char c);
 	
 private:
