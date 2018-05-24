@@ -1,14 +1,14 @@
 \subsection{Purpose}
 The goal of this project is to design a game for two or more players, where the STM32’s microphone is used to control a robot.\\*
 This project is a variant of the project proposal where the STM32F4 was used in a game for two or more players to choose and recognize a frequency with the microphone.\\*
-In this project, the embedded microphone of the board is used to control the stepper motors and move the robot on the surrounding environment.
+The embedded microphone of the board is used to control the stepper motors and move the robot on the surrounding environment.
 
 \subsection{Description of the robot}
 The robot has a cylindrical shape and it is equipped with wheels on the bottom that allow it to move forward, backward, turn left and right.\\*
 The structure of the project is divided in two different part: the transmitter and the receiver.
 The transmitter is represented by the STM32F4 discovery board which is in charge to recognize the frequency of the sounds emitted by the player, elaborate them into commands and send these commands to the receiver.
 The receiver is represented by an Arduino board which is directly connected to the mechanical body of the robot. The Arduino board receives the commands from the discovery board and uses them to control the engines of the robot.
-The wireless communication is managed through two hc-05 Bluetooth modules: one for the transmitter and one for the receiver.
+The wireless communication is managed through two hc-05 Bluetooth modules: one for the transmitter and one for the receiver.\\
 We used a 3D printer to build the body of the robot. 
 
 \subsection{Game logic}
