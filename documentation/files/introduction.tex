@@ -5,14 +5,14 @@ In our project, we use the embedded microphone of the board to controls the step
 
 \subsection{Description of the robot}
 The robot has a cylindrical shape and it is equipped with wheels on the bottom that allow it to move forward, backward, turn left and right.\\*
-The srtucture of the project is divided in two different part: the transmitter and the receiver.
-The transmitter is rapresented by the STM32F4 discovery board which is in charge to recognize the frequency of the sounds emitted by the player, elaborate them into commands and send these commands to the receiver.
-The receiver is rapresented by an Arduino board which is directly connected to the mecanichal body of the robot. The arduino board receives the commands from the discovery board and uses them to control the engines of the robot.
-The wireless communication is is managed through two hc-05 bluetooth modules: one for the transmitter and one for the receiver.
+The structure of the project is divided in two different part: the transmitter and the receiver.
+The transmitter is represented by the STM32F4 discovery board which is in charge to recognize the frequency of the sounds emitted by the player, elaborate them into commands and send these commands to the receiver.
+The receiver is represented by an Arduino board which is directly connected to the mechanical body of the robot. The Arduino board receives the commands from the discovery board and uses them to control the engines of the robot.
+The wireless communication is managed through two hc-05 Bluetooth modules: one for the transmitter and one for the receiver.
 We used a 3D printer to build the body of the robot. 
 
 \subsection{Game logic}
-The game consists of a race between 2 or more robots. Each player controls his own robot through whistles, and he will guide it along the way. The most skilled player in the control of the robot, the one who will arrive first at the end of the path, will be the winner.\\*
+The game consists of a race between two or more robots. Each player controls his own robot through whistles, and he will guide it along the way. The most skilled player in the control of the robot, the one who will arrive first at the end of the path, will be the winner.\\*
 A specific movement of the robot will correspond to each sound (frequency):
 \begin{itemize}
 	\item Forward movement
@@ -22,7 +22,7 @@ A specific movement of the robot will correspond to each sound (frequency):
 \end{itemize}
 
 \subsection{Code structure}
-We decided to structure the code in many components, in order to make the project extendable, easy to edit and easy to readapt.\\*
+The code is structured in many components, in order to make the project extendable, easy to edit and easy to readapt.\\*
 The main core of the project is represented by the transmitter. All other components of the robot are connected to the receiver.\\*
 The frequency analyser converts the analog data obtained with the microphone into digital numbers.\\*
 These information are translated in commands used to control the wheels of the robot.
