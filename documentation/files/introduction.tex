@@ -1,9 +1,7 @@
 \subsection{Purpose}
-The goal of this project is to design a game for two or more players, where the STM32’s microphone is used to control a robot.\\*
-This project is a variant of the project proposal where the STM32F4 was used in a game for two or more players to choose and recognize a frequency with the microphone.\\*
-The embedded microphone of the board is used to control the stepper motors and move the robot on the surrounding environment.
+The goal of this project is to design a game for two or more players, where the Discovery microphone is used to control a robot, through a whistle, detecting the frequency. In particular, this board, after calculating the frequency, sends to the robot a related command for choosing the direction to take, using a Bluetooth connection.
 
-\subsection{Description of the robot}
+\subsection{Description of the project}
 The robot has a cylindrical shape and it is equipped with wheels on the bottom that allow it to move forward, backward, turn left and right.\\*
 The structure of the project is divided in two different part: the transmitter and the receiver.
 The transmitter is represented by the STM32F4 discovery board which is in charge to recognize the frequency of the sounds emitted by the player, elaborate them into commands and send these commands to the receiver.
@@ -22,14 +20,9 @@ A specific movement of the robot will correspond to each sound (frequency):
 \end{itemize}
 
 \subsection{Code structure}
-The code is structured in many components, in order to make the project extendable, easy to edit and easy to readapt.\\*
-The main core of the project is represented by the transmitter. All other components of the robot are connected to the receiver.\\*
-The frequency analyser converts the analog data obtained with the microphone into digital numbers.\\*
-These information are translated in commands used to control the wheels of the robot.
-
-\newpage
-\begin{figure}[h!]
-	\hspace*{-0.15 \textwidth}\includegraphics[width= 1.3\textwidth]
-	{files/images/SystemStructure}
-	\caption{This is a general overview of the system.}
-\end{figure}
+The code is organized in three main sections, in order to improve the maintainability and the creation process:
+\begin{itemize}
+	\item \textit{The Transmitter}: this part is represented by the Discovery board and it converts the perceived sounds in numerical frequencies. After that, the board picks the expected command for that value and sends it to the robot.
+	\item \textit{The Communication}: this is the part that transfers the command from the Discovery to the Arduino through a Bluetooth channel.
+	\item \textit{The Receiver}: this is the real robot, which executes the received commands, changing its state.
+\end{itemize}
