@@ -11,14 +11,14 @@
 #define FFT_SIZE SAMPLES/2 //we store only the real parts of the samples
 
 //this is the minimum amplitude of the acquired sound in order to activate the engines
-#define AMPLITUDE_THRESHOLD 5000000
+#define AMPLITUDE_THRESHOLD 7000000
 
 //if the sound's frequency is between these 2 values, the car will move forward
-#define FORWARD_MIN_FREQ 300
+#define FORWARD_MIN_FREQ 500
 #define FORWARD_MAX_FREQ 1000
 
 //if the sound's frequency is between these 2 values, the car will turn left
-#define TURNLEFT_MIN_FREQ 1200
+#define TURNLEFT_MIN_FREQ 1100
 #define TURNLEFT_MAX_FREQ 1800
 
 //if the sound's frequency is between these 2 values, the car will turn right
@@ -63,6 +63,8 @@ ReceiverState state;
  * the frequency and the amplitude of the last acquired sample, respectively.
  */
 void callback(){
+	
+	//display.printNum((int)fundamentalFreqAmplitude,1);
 
     if(!(fundamentalFreqAmplitude>AMPLITUDE_THRESHOLD)){
     	display.setFrequencyTooLow();
@@ -71,6 +73,8 @@ void callback(){
     	greenLed::low();
     	return;
     }
+	
+	fundamentalFreqAmplitude= fundamentalFreqAmplitude * (500/((int)freq));
 
     if(freq < FORWARD_MAX_FREQ && freq > FORWARD_MIN_FREQ) {
             //if the frequency of the detected sound is between the FORWARD_MIN_FREQ and FORWARD_MAX_FREQ values, move forward

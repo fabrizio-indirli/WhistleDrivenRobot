@@ -47,6 +47,8 @@ public:
 	
 	void setCommand(Command command);
 	
+	void printNum(int num, int row);
+	
 private:
 	/**
 	 * This is the length of the display in number of characters.

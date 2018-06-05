@@ -47,6 +47,14 @@ void Display::updateFrequency(){
     fillDisplaySpace(n);
 }
 
+void Display::printNum(int num, int row)
+{
+	int n=0;
+	display->go(0, row);
+	display->printf("%i", num, &n);
+	fillDisplaySpace(n);
+}
+
 void Display::updateCommand(){
 	int n = 0;
 	display->go(0,1);
