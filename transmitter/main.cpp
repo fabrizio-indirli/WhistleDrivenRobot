@@ -63,8 +63,6 @@ ReceiverState state;
  * the frequency and the amplitude of the last acquired sample, respectively.
  */
 void callback(){
-	
-	//display.printNum((int)fundamentalFreqAmplitude,1);
 
     if(!(fundamentalFreqAmplitude>AMPLITUDE_THRESHOLD)){
     	display.setFrequencyTooLow();
