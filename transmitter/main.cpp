@@ -5,13 +5,13 @@
 #include <util/lcd44780.h>
 #include <stdio.h>
 #include <display/display.h>
-#include <ReceiverState.cpp>
+#include <ReceiverState.h>
 
 #define SAMPLES 8192 //audio samples acquired each time
 #define FFT_SIZE SAMPLES/2 //we store only the real parts of the samples
 
 //this is the minimum amplitude of the acquired sound in order to activate the engines
-#define AMPLITUDE_THRESHOLD 5000000
+#define AMPLITUDE_THRESHOLD 20000000
 
 //if the sound's frequency is between these 2 values, the car will move forward
 #define FORWARD_MIN_FREQ 300
