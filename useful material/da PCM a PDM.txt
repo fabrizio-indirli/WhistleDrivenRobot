@@ -1,9 +1,0 @@
-Il microfono della scheda acquisisce in PDM - Pulse Density Modulation.
-Ogni bit è un sample acquisito. L'ampiezza d'onda può essere ipotizzata considerando la densità di '1' nella sequenza.
-Cioè, in un intervallo di tempo in cui viene registrato un suono intenso, vi saranno molti '1' vicini.
-Per calcolare la densità sonora in ogni istante, si può calcolare in ogni istante la media mobile, considerando ad esempio 5 samples: avg(0,1,1,1,0)=0.6;
-per l'istante successivo si calcola la media dei 5 bits successivi, e così via.
-Per fare ciò, è necessario :
-	1. campionare ad una frequenza pari a N volte la freq. di sampling desiderata (oversampling), dove N è il numero di samples su cui si fa la media (nell'esempio precedente N=5).
-	2. Applicare un filtro passa-basso per evitare aliasing
-	3. Downsampling: sostituire ogni N segnali dello stream con la loro media
