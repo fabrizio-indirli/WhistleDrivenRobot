@@ -1,1 +1,13 @@
-documentation/documentation.synctex.gz
+# This avoids macOS files
+*.DS_Store
+
+# This avoids Latex file
+*.aux
+*.log
+*.out
+*.gz
+*.toc
+
+# Avoid IDE files
+.idea
+CMakeLists.txt

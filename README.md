@@ -16,4 +16,4 @@ to the robot using a Bluetooth module.
 #### Used libraries
 - STM32 OS Miosix: https://miosix.org/
 - Lorenzo Binosi and Matheus Fim’s Guitar Tuner Project: 
-https://github.com/LorenzoBinosi/AOSPro ject?files=1
+https://github.com/LorenzoBinosi/AOSProject?files=1
