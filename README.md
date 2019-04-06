@@ -1,5 +1,6 @@
 # Whistle Driven Robot
 
+<img width="35%" src="photos/IMG_20190316_165341874.jpg" alt="Robot Photo" align="right"> 
 This project was developed for the course _Advanced Operating
 Systems_ in the academic year 2017/2018 on the Politecnico of Milan.
 
